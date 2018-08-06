@@ -12,10 +12,12 @@ import {
     View,
     SectionList,
     TouchableOpacity,
+    Image,
 } from 'react-native';
 
 import Request from './Request';
 import Config from './config';
+const  settingIcon = require('../resources/icon_set.png');
 export default class Test3 extends Component {
     static navigationOptions = ({navigation,screenProps}) => ({
         tabBarOnPress:(({ scene ,jumpToIndex})=>{
@@ -23,10 +25,20 @@ export default class Test3 extends Component {
             // alert(index);
             jumpToIndex(scene['index']);
         }),
+        headerRight:(
+            <TouchableOpacity onPress={()=>navigation.state.params.navigatePress()}>
+            <View>
+                {<Image source={require('../resources/icon_set.png')} style={[{width:25,height:25}]} />}
+            </View>
+            </TouchableOpacity>
+        ),
     })
     // component挂载完毕后调用
     componentDidMount(){
         this.fetchData();
+        this.props.navigation.setParams({   //右键按钮需要注册
+            navigatePress:this.navigatePress,
+        });
     }
 
     fetchData(){
@@ -45,7 +57,10 @@ export default class Test3 extends Component {
         this.state = {
             dataSource  : dataSource,
         };
+    }
 
+    navigatePress = () => {
+        alert('点击headerRight');
     }
 
     _pressRow(item){

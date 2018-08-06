@@ -21,7 +21,7 @@ import {
     Image,
     StyleSheet,
     Text,
-    AsyncStorage
+    AsyncStorage,
 } from 'react-native';
 
 import MainCtrlVCN from './MainCtrolView';
@@ -67,7 +67,6 @@ const MyTab = TabNavigator({
             // headerBackTitleStyle:{}, // 设置导航条返回文字样式。
             // headerTintColor:'green', // 设置导航栏文字颜色。总感觉和上面重叠了。
             gesturesEnabled:true, // 是否支持滑动返回收拾，iOS默认支持，安卓默认关闭
-
 
             // TabNavigator 属性部分
 
