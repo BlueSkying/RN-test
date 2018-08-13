@@ -46,20 +46,25 @@ export default class Test3 extends Component {
     }
 
     fetchData(){
-        Request.get(Config.api.homeList,(data)=>{
+        Request.post(Config.api.homeList,{'sCommandName':'getMember','sInput':{"ID":'1285858633'}},(data)=>{
             this.setState({
-                dataSource:data,
+                headImageUrl:data.Item.sHeadImg,
+                nickName:data.Item.sNickName,
             });
         },(error)=>{
-            console.warn(error);
+           console.warn(error);
         });
     }
 
     constructor(props){
         super(props);
         let dataSource = [];
+        let headImageUrl = '';
+        let nickName = '生活家';
         this.state = {
             dataSource  : dataSource,
+            headImageUrl :headImageUrl,
+            nickName : nickName,
         };
     }
 
@@ -69,7 +74,7 @@ export default class Test3 extends Component {
 
     _pressRow(item){
         // alert(item.title);
-        alert(this.state.dataSource.data[0].url);
+        alert(this.state.headImageUrl);
     }
 
     _renderItem = (info) =>{
@@ -81,10 +86,13 @@ export default class Test3 extends Component {
         return(
           <View style={{width:kwidth, height:150}}>
               <ImageBackground source={require('../resources/my_bg.png')} style={{width:kwidth, height:150}}>
-                  <Image source={require('../resources/my_head.png')} style={{width:60,height:60,marginLeft:'auto',marginRight:'auto',marginTop:10}} />
-                  <Text style={styles.headerTitleName}>18123399795</Text>
-                  <ImageBackground source={require('../resources/filter40.png')} style={{width:50,height:20,marginLeft:'auto',marginRight:'auto'}}>
-                      <Image source={require('../resources/jiadou_icon.png')} style={{width:12,height:13,marginLeft:5,marginTop:3}} />
+                  <Image source={this.state.headImageUrl.length>0?{uri:this.state.headImageUrl}:require('../resources/my_head.png')} style={styles.headImage} />
+                  <Text style={styles.headerTitleName}>{this.state.nickName}</Text>
+                  <ImageBackground source={require('../resources/filter40.png')} style={{flex:1,
+                      flexDirection:'row',width:100,height:20,marginLeft:'auto',marginRight:'auto'}}>
+                      <Image source={require('../resources/jiadou_icon.png')} style={{flex:1,height:13,marginLeft:5,marginTop:3}} />
+                      <Text style={styles.jiadouTitle}>43824个</Text>
+                      <Image source={require("../resources/jiadou_arrow.png")} style={{flex:1,height:13,marginRight:5,marginTop:3}} />
                   </ImageBackground>
               </ImageBackground>
           </View>
@@ -101,7 +109,7 @@ export default class Test3 extends Component {
     }
     render() {
         var sections = [
-            {key:'A',data:[{title:"阿童木"}],renderItem:this._overrideRenderItem},   //可以每个行设置不同的ui风格
+            {data:[{title:"阿童木"}],renderItem:this._overrideRenderItem},   //可以每个行设置不同的ui风格
             {key:'B',data:[{title:"表哥"},{title:"贝贝"},{title:"表弟"},{title:"表姐"},{title:"表叔"}]},
             {key:"C",data:[{title:"成吉思汗"},{title:"超市快递"}]},
             {key:"W",data:[{title:"王磊"},{title:"王者荣耀"},{title:"往事不能回味"},{title:'王小磊'},{title:"王中磊"},{title:"王大磊"}]},
@@ -125,6 +133,23 @@ export default class Test3 extends Component {
 }
 
 const styles = StyleSheet.create({
+    headImage:{
+        width:60,
+        height:60,
+        borderRadius:30,
+        marginLeft:'auto',
+        marginRight:'auto',
+        marginTop:10,
+    },
+    jiadouTitle:{
+        flex:4,
+        height:16,
+        marginTop:2,
+        justifyContent:'center',
+        alignItems:'center',
+        color:'#ffffff',
+        fontSize:13,
+    },
    rowItem:{
        alignItems:'flex-start',
        justifyContent:'center',

@@ -1,7 +1,7 @@
 
 const Config={
     api:{
-        homeList:"http://smartecm.justbon.com/wangqiang/Tenant.txt",
+        homeList:"http://openapi.justbon.cn:8392/members/member",
     },
 };
 
