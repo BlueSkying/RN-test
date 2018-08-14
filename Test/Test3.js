@@ -58,8 +58,7 @@ export default class Test3 extends Component {
 
     constructor(props){
         super(props);
-        index = -1;
-        imageArray = [require('../resources/my_icon_01.png'),require('../resources/my_icon_02.png'),require('../resources/my_icon_03.png'),require('../resources/my_icon_04.png'),
+        imageArray = [require('../resources/my_icon_01.png'),require('../resources/my_icon_02.png'),require('../resources/my_icon_03.png'),require('../resources/my_icon_04.png')
             ,require('../resources/my_icon_05.png'),require('../resources/my_icon_06.png'),require('../resources/my_icon_07.png'),require('../resources/my_icon_08.png')
             ,require('../resources/my_icon_09.png'),require('../resources/my_icon_10.png'),require('../resources/my_icon_11.png'),require('../resources/my_icon_12.png')];
         let dataSource = [];
@@ -69,7 +68,6 @@ export default class Test3 extends Component {
             dataSource  : dataSource,
             headImageUrl :headImageUrl,
             nickName : nickName,
-            index:index,
         };
     }
 
@@ -83,13 +81,13 @@ export default class Test3 extends Component {
     }
 
     _renderItem = (info) =>{
-        index++;
         var txt = '' + info.item.title;
+        var inde = info.item.index;
         return <TouchableOpacity  onPress={() => this._pressRow(info.item)} underlayColor="transparent">
             <View style={styles.rowItem}>
-                <Image source={imageArray[index]} style={styles.rowIcon} />
+                <Image source={imageArray[inde]} style={styles.rowIcon} />
                 <Text style={styles.rowItemTitle}>{txt}</Text>
-                <Image source={require("../resources/jiadou_arrow.png")} style={styles.itemArrow} />
+                <Image source={require("../resources/ic_next.png")} style={styles.itemArrow} />
             </View></TouchableOpacity>
     }
 
@@ -111,8 +109,10 @@ export default class Test3 extends Component {
     }
 
     _setionComp = (info) =>{
-        var txt = '' + info.section.key;
-        return <View style={{height:50,justifyContent:"center",alignItems:'center',backgroundColor:'#9cebbc'}}><Text style={{color:'white',fontSize:30}}>{txt}</Text></View>
+         var txt = info.section.key;
+        return <View style={{height:txt == 'first'?0:10,justifyContent:"center",alignItems:'center'}}>
+
+        </View>
     }
 
     _extraUniqueKey(item ,index){
@@ -120,18 +120,16 @@ export default class Test3 extends Component {
     }
     render() {
         var sections = [
-            {data:[{title:"阿童木"}],renderItem:this._overrideRenderItem},   //可以每个行设置不同的ui风格
-            {data:[{title:"我的商城"},
-                    {title:"我的嘉豆"},{title:"我的邮包"},
-                    {title:"商家入住"}]},
-            {data:[{title:"我的消息"},{title:"我的帖子"},{title:"参加的活动"},{title:"中奖记录"}]},
-            {key:"W",data:[{title:"房屋管理"},{title:"我的房源"}]},
-            {data:[{title:"意见反馈"},{title:"关于生活家"}]}
+            {key:'first', data:[{title:"阿童木"}],renderItem:this._overrideRenderItem},   //可以每个行设置不同的ui风格
+            {data:[{title:"我的商城",index:0},{title:"我的嘉豆",index:1},{title:"我的邮包",index:2},{title:"商家入住",index:3}]},
+            {data:[{title:"我的消息",index:4},{title:"我的帖子",index:5},{title:"参加的活动",index:6},{title:"中奖记录",index:7}]},
+            {key:"W",data:[{title:"房屋管理",index:8},{title:"我的房源",index:9}]},
+            {data:[{title:"意见反馈",index:10},{title:"关于生活家",index:11}]}
         ];
         return(
             <View style={{flex:1}}>
                 <SectionList
-                    // renderSectionHeader={this._setionComp}
+                    renderSectionHeader={this._setionComp}
                     renderItem = {this._renderItem}
                     sections = {sections}
                     ItemSeparatorComponent = {()=><View><Text></Text></View>}
@@ -192,10 +190,10 @@ const styles = StyleSheet.create({
         width:kwidth,
     },
     itemArrow:{
-        height:13,
-        marginLeft:kwidth-15-12,
-        marginTop:16,
-        backgroundColor:'#000000',
+        height:14,
+        marginLeft:'auto',
+        marginRight:30,
+        marginTop:15,
     }
 });
 
