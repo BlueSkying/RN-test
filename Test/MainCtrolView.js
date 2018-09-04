@@ -12,7 +12,40 @@ import {
     View
 } from 'react-native';
 
+import MainTitleView from './MainTitleView.js';
+
 export default class Test1 extends Component {
+
+    static navigationOptions = ({navigation,screenProps}) => ({
+        // 这里面的属性和App.js的navigationOptions是一样的。
+        header:(
+            <MainTitleView  scan={()=>navigation.state.params?navigation.state.params.scanBrcode():null}
+                            exchange = {()=>navigation.state.params?navigation.state.params.exchangeProject():null}/>
+        )
+    })
+
+    componentDidMount(){
+        // 通过在componentDidMount里面设置setParams将title的值动态修改
+        this.props.navigation.setParams({
+            scanBrcode:this.scan,
+            exchangeProject:this.exchange,
+        });
+    }
+
+    //点击了扫描按钮
+    scan = ()=>{
+        alert('点击了扫描按钮')
+    }
+     //点击了项目切换按钮
+    exchange = ()=>{
+        alert('点击了项目切换按钮')
+    }
+
+    navigatePress = () => {
+        const { goBack } = this.props.navigation;
+        goBack();
+    }
+
     render() {
         return (
             <View style={styles.container}>
