@@ -88,7 +88,7 @@ const MyTab = TabNavigator({
         navigationOptions: ()=> TabOptions('邻里',neberIcon,neberIcon,'邻里'),
     },
     Test3:{
-        screen:Test3,
+        screen:Test2,
         navigationOptions: ()=> TabOptions('商城',shopIcon,shopIcon,'商城'),
     },
     Test4:{

@@ -11,9 +11,12 @@ import {
     Text,
     View,
     Image,
-    DeviceEventEmitter
+    DeviceEventEmitter,
+    Dimensions,
+    WebView,
 } from 'react-native';
-
+import Test3 from "./Test3";
+const { kwidth , kheight} = Dimensions.get('window');
 const GankIcon = require('../resources/Gank.png');
 const ShiTuIcon = require('../resources/ShiTu.png');
 
@@ -51,9 +54,9 @@ export default class Test2 extends Component {
         tabBarOnPress:(obj)=>{
             console.log(obj);
 
-            navigation.state.params.tabBarOnPress()
+            // navigation.state.params.tabBarOnPress();
 
-            obj.jumpToIndex(obj.scene.index)
+            obj.jumpToIndex(obj.scene.index);
         },
     })
 
@@ -86,20 +89,20 @@ export default class Test2 extends Component {
         bar()
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    Welcome to Test2 !
-                </Text>
-                <Text style={styles.instructions} onPress={()=>{
-              const { navigate } = this.props.navigation;
-              navigate('Detail1',{
-                  headerTitle:'我是修改后的文字'
-              });
-          }}>
-                    点我跳转到Detail1，跳转的时候携带参数，修改了Detail1的导航栏文字
-                </Text>
-                <Text style={styles.instructions}>
-                    当前页面的Tabbar是通过页面自定义的，图片和颜色都是图片本来的色彩。
-                </Text>
+                <WebView scalesPageToFit={true}
+                         bounces={false}
+                         source={{uri:"http://www.jianshu.com/u/d5b531888b2b"}}
+                         style={styles.webSize}
+                         onLoad={(e)=>console.log('load')}
+                         onLoadEnd={(e)=>console.log('onloadend')}
+                         onLoadStart={(e)=>console.log('onloadstart')}
+                         renderError={()=>{
+                             return<View><Text>renderError回调了，出现错误</Text></View>
+                         }}
+                         renderLoading={()=>{
+                             return<View><Text>这是自定义Loading....</Text></View>
+                         }}
+                />
             </View>
         );
     }
@@ -108,9 +111,10 @@ export default class Test2 extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+    },
+    webSize:{
+      width:kwidth,
+      height:kheight,
     },
     welcome: {
         fontSize: 20,
@@ -126,3 +130,4 @@ const styles = StyleSheet.create({
     },
 });
 
+AppRegistry.registerComponent('AwesomeProject',()=>Test2);
