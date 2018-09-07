@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import {
+    ActivityIndicator,
     AppRegistry,
     StyleSheet,
     Text,
@@ -91,16 +92,22 @@ export default class Test2 extends Component {
             <View style={styles.container}>
                 <WebView scalesPageToFit={true}
                          bounces={false}
-                         source={{uri:"http://www.jianshu.com/u/d5b531888b2b"}}
+                         source={{uri:"http://mall.justbon.com.cn/m/project.html?uid=1285858633&userToken=CA1FC79A7910241C1479B3ABADD1EB2B"}}
                          style={styles.webSize}
                          onLoad={(e)=>console.log('load')}
                          onLoadEnd={(e)=>console.log('onloadend')}
-                         onLoadStart={(e)=>console.log('onloadstart')}
+                         onLoadStart={(e)=>{
+                             return (<View style={[styles.container,styles.horizontal]}>
+                                        <ActivityIndicator size='large' color='#0000ff'/>
+                                     </View>)
+                         }}
                          renderError={()=>{
-                             return<View><Text>renderError回调了，出现错误</Text></View>
+                             return(<View><Text>renderError回调了，出现错误</Text></View>)
                          }}
                          renderLoading={()=>{
-                             return<View><Text>这是自定义Loading....</Text></View>
+                              return (<View style={[styles.container,styles.horizontal]}>
+                                        {<ActivityIndicator size='large' color='#0000ff'/>}
+                                      </View>)
                          }}
                 />
             </View>
@@ -128,6 +135,11 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         fontSize:18
     },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10
+    }
 });
 
 AppRegistry.registerComponent('AwesomeProject',()=>Test2);

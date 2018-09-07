@@ -17,7 +17,9 @@ const  Request = {
             method:"POST",
             headers:{
                 Accept:'application/json',
-                "Content-Type":"application/json"
+                "Content-Type":"application/json",
+                "version":"200",
+                "clientId":"10101",
             },
             body:JSON.stringify(dic)
         })  .then((response)=>response.json())
