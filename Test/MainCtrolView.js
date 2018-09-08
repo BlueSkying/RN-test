@@ -15,7 +15,12 @@ import {
 } from 'react-native';
 import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
-
+import Request from './Request';
+import Config from './config';
+//监听定位的id
+let loactionID = null;
+var longitude = null;
+var latitude = null;
 export default class Test1 extends Component {
 
     static navigationOptions = ({navigation,screenProps}) => ({
@@ -26,29 +31,33 @@ export default class Test1 extends Component {
         ),
     })
 
+    constructor(props){
+        super(props);
+        let weatherMap = [];
+        this.state = {
+            weatherMap:weatherMap,
+        }
+    }
+
     componentDidMount(){
         // 通过在componentDidMount里面设置setParams将title的值动态修改
         this.props.navigation.setParams({
             scanBrcode:this.scan,
             exchangeProject:this.exchange,
         });
-        let promise = this.getLongitudeAndLatitude();
-        console.log(promise);
+        this.getLongitudeAndLatitude();
+        this.fetchBannerAds();
     }
 
     componentWillUnmount() {
-        navigator.geolocation.clearWatch()
+        this.stopLocation()
     }
 
     //获取经纬度的方法  Longitude  Latitude
     getLongitudeAndLatitude = () => {
 
-        //获取位置再得到城市先后顺序，通过Promise完成
-        return new Promise((resolve, reject) => {
-
-            Geolocation.getCurrentPosition(
+        loactionID =  Geolocation.getCurrentPosition(
                 location => {
-
                     //可以获取到的数据
                     var result = "速度：" + location.coords.speed +
                         "\n经度：" + location.coords.longitude +
@@ -58,19 +67,56 @@ export default class Test1 extends Component {
                         "\n海拔：" + location.coords.altitude +
                         "\n海拔准确度：" + location.coords.altitudeAccuracy +
                         "\n时间戳：" + location.timestamp;
-
-                    // ToastAndroid.show("UTIl" + location.coords.longitude, ToastAndroid.SHORT);
-
-                    resolve([location.coords.longitude, location.coords.latitude]);
+                    longitude=location.coords.longitude.toString();
+                    latitude=location.coords.latitude.toString();
+                    this.fetchWeather();
+                    // Alert.alert(result);
                 },
                 error => {
                      Alert.alert("获取位置失败：" + error, "")
-                    reject(error);
                 }
             );
-        })
     }
 
+    //停止地图定位
+    stopLocation(){
+        Geolocation.clearWatch(loactionID);
+    }
+    //获取banner广告
+    fetchBannerAds(){
+        Request.post(Config.api.bannerAdsUrl,{'type':'index','projectId':'38562569'},(data)=>{
+            // console.warn(data);
+            this.fetchButtonRole();
+        },(error)=>{
+            console.warn(error);
+        });
+    }
+    //根据经纬度获取天气和现行情况
+    fetchWeather(){
+       Request.post(Config.api.wetherUrl,{'location':(longitude + "," + latitude)},(data)=>{
+              weatherMap=data;
+           // console.warn(weatherMap);
+        },(error)=>{
+            console.warn(error);
+        });
+    }
+    //获取按钮权限
+    fetchButtonRole(){
+        Request.get(Config.api.buttoRoleUrl,(data)=>{
+            console.warn(data);
+            this.fetchShopMail();
+        },(error)=>{
+            console.warn(error);
+        });
+    }
+    //获取通栏广告
+    fetchShopMail(){
+        Request.post(Config.api.shopMailUrl,{'projectId':'38562569'},(data)=>{
+            // console.warn(data);
+        },(error)=>{
+            console.warn(error);
+        });
+    }
     //点击了扫描按钮
     scan = ()=>{
         alert('点击了扫描按钮')
