@@ -10,7 +10,8 @@ import {
     StyleSheet,
     Text,
     View,
-    Alert
+    Alert,
+    SectionList
 } from 'react-native';
 import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
@@ -85,6 +86,7 @@ export default class Test1 extends Component {
     }
 
     render() {
+        var sections = [];
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
