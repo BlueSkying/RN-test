@@ -61,11 +61,9 @@ export default class Test3 extends Component {
         imageArray = [require('../resources/my_icon_01.png'),require('../resources/my_icon_02.png'),require('../resources/my_icon_03.png'),require('../resources/my_icon_04.png')
             ,require('../resources/my_icon_05.png'),require('../resources/my_icon_06.png'),require('../resources/my_icon_07.png'),require('../resources/my_icon_08.png')
             ,require('../resources/my_icon_09.png'),require('../resources/my_icon_10.png'),require('../resources/my_icon_11.png'),require('../resources/my_icon_12.png')];
-        let dataSource = [];
         let headImageUrl = '';
         let nickName = '生活家';
         this.state = {
-            dataSource  : dataSource,
             headImageUrl :headImageUrl,
             nickName : nickName,
         };

@@ -11,7 +11,9 @@ import {
     Text,
     View,
     Alert,
-    SectionList
+    Image,
+    SectionList,
+    Dimensions,
 } from 'react-native';
 import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
@@ -21,6 +23,7 @@ import Config from './config';
 let loactionID = null;
 var longitude = null;
 var latitude = null;
+const { kwidth , kheight} = Dimensions.get('window');
 export default class Test1 extends Component {
 
     static navigationOptions = ({navigation,screenProps}) => ({
@@ -33,9 +36,13 @@ export default class Test1 extends Component {
 
     constructor(props){
         super(props);
-        let weatherMap = [];
+        let weatherMap = {};
+        var bannerArray = [];
+        var bannerImgUrl = null;
         this.state = {
             weatherMap:weatherMap,
+            bannerArray:bannerArray,
+            bannerImgUrl:bannerImgUrl,
         }
     }
 
@@ -47,6 +54,26 @@ export default class Test1 extends Component {
         });
         this.getLongitudeAndLatitude();
         this.fetchBannerAds();
+
+        var conunter = 0;
+        setInterval(()=>{
+            if(this.state.bannerArray != null) {
+                conunter++;
+                if(conunter == this.state.bannerArray.length){
+                    conunter = 0;
+                }
+                let brannerMap = this.state.bannerArray[conunter];
+                if(brannerMap != null){
+                    this.setState({
+                        bannerImgUrl:brannerMap.imgUrl,
+                    });
+                    console.warn(this.state.bannerImgUrl);
+                }
+                // console.warn(brannerMap)
+            }else{
+                console.warn('无数据');
+            }
+        },3000);
     }
 
     componentWillUnmount() {
@@ -86,6 +113,10 @@ export default class Test1 extends Component {
     fetchBannerAds(){
         Request.post(Config.api.bannerAdsUrl,{'type':'index','projectId':'38562569'},(data)=>{
             // console.warn(data);
+            this.setState({
+               bannerArray:data.ads,
+            });
+            this.props.navigation.state.params.refresh(true);
             this.fetchButtonRole();
         },(error)=>{
             console.warn(error);
@@ -94,8 +125,12 @@ export default class Test1 extends Component {
     //根据经纬度获取天气和现行情况
     fetchWeather(){
        Request.post(Config.api.wetherUrl,{'location':(longitude + "," + latitude)},(data)=>{
-              weatherMap=data;
-           // console.warn(weatherMap);
+            // weatherMap=data;
+            this.setState({
+               weatherMap:data,
+            });
+            this.props.navigation.state.params.refresh(true);
+            // console.warn(weatherMap);
         },(error)=>{
             console.warn(error);
         });
@@ -103,7 +138,7 @@ export default class Test1 extends Component {
     //获取按钮权限
     fetchButtonRole(){
         Request.get(Config.api.buttoRoleUrl,(data)=>{
-            console.warn(data);
+            // console.warn(data);
             this.fetchShopMail();
         },(error)=>{
             console.warn(error);
@@ -130,9 +165,56 @@ export default class Test1 extends Component {
         const { goBack } = this.props.navigation;
         goBack();
     }
+    _renderItem = (info) => {
+       return(
+           <View>
 
+           </View>
+       );
+    }
+    //banner广告循环
+    _cirecleBannerImgItem = (info) =>{
+        return(
+            <View style={styles.banner}>
+                    <Image source={{uri:(this.state.bannerImgUrl)?this.state.bannerImgUrl:''}} style = {styles.banner} />
+            </View>
+        );
+    }
+    //天气预报  限行
+    _weatherLimitItem = (info) =>{
+           // console.warn(this.state.weatherMap);
+        var xxlimit = this.state.weatherMap.xx;
+        // console.warn(xxlimit);
+        return(
+            <View style={styles.weatherStyle}>
+                <Text style={styles.cityStyle}>
+                    {this.state.weatherMap.city +'        '+ this.state.weatherMap.weather +'      '+ this.state.weatherMap.cTemperature +'℃'}
+                </Text>
+                <Text style={styles.limitStyle}>
+                    {'车辆限行    ' + ((!xxlimit)?'--':xxlimit.xxnum)}
+                </Text>
+            </View>
+        );
+    }
+    _extraUniqueKey(item ,index){
+        return "index"+index+item;
+    }
     render() {
-        var sections = [];
+        var sections = [
+            {key:'first', data:[{title:"阿童木"}],renderItem:this._cirecleBannerImgItem},   //可以每个行设置不同的ui风格
+            {key:'second', data:[{title:"阿童木"}],renderItem:this._weatherLimitItem},
+        ];
+        return(
+            <View style={{flex:1}}>
+              <SectionList
+                 renderItem = {this._renderItem}
+                 sections = {sections}
+                 ItemSeparatorComponent = {()=><View><Text></Text></View>}
+                 keyExtractor = {this._extraUniqueKey}// 每个item的key
+              />
+            </View>
+        );
+        /*
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
@@ -156,6 +238,7 @@ export default class Test1 extends Component {
 
             </View>
         );
+        */
     }
 }
 
@@ -178,5 +261,28 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         fontSize: 18,
     },
+    banner:{
+        backgroundColor:'#ffffff',
+        width:kwidth,
+        height:200,
+    },
+    weatherStyle:{
+        backgroundColor:'#ffffff',
+        flexDirection:'row',
+        width:kwidth,
+        height:40,
+    },
+    cityStyle:{
+      marginTop:10,
+      marginLeft:15,
+      marginRight:'auto',
+      marginBottom:'auto'
+    },
+    limitStyle:{
+        marginTop:10,
+        marginRight:15,
+        marginLeft:'auto',
+        marginBottom:'auto',
+    }
 });
 
