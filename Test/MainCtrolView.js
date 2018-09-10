@@ -24,6 +24,7 @@ let loactionID = null;
 var longitude = null;
 var latitude = null;
 const { kwidth , kheight} = Dimensions.get('window');
+const kBtnwidth = kwidth/4;
 export default class Test1 extends Component {
 
     static navigationOptions = ({navigation,screenProps}) => ({
@@ -39,10 +40,12 @@ export default class Test1 extends Component {
         let weatherMap = {};
         var bannerArray = [];
         var bannerImgUrl = null;
+        var btnArray = [];
         this.state = {
             weatherMap:weatherMap,
             bannerArray:bannerArray,
             bannerImgUrl:bannerImgUrl,
+            btnArray:btnArray,
         }
     }
 
@@ -54,7 +57,7 @@ export default class Test1 extends Component {
         });
         this.getLongitudeAndLatitude();
         this.fetchBannerAds();
-
+        // this.fetchButtonRole();
         var conunter = 0;
         setInterval(()=>{
             if(this.state.bannerArray != null) {
@@ -67,7 +70,6 @@ export default class Test1 extends Component {
                     this.setState({
                         bannerImgUrl:brannerMap.imgUrl,
                     });
-                    console.warn(this.state.bannerImgUrl);
                 }
                 // console.warn(brannerMap)
             }else{
@@ -116,7 +118,6 @@ export default class Test1 extends Component {
             this.setState({
                bannerArray:data.ads,
             });
-            this.props.navigation.state.params.refresh(true);
             this.fetchButtonRole();
         },(error)=>{
             console.warn(error);
@@ -129,7 +130,6 @@ export default class Test1 extends Component {
             this.setState({
                weatherMap:data,
             });
-            this.props.navigation.state.params.refresh(true);
             // console.warn(weatherMap);
         },(error)=>{
             console.warn(error);
@@ -137,8 +137,12 @@ export default class Test1 extends Component {
     }
     //获取按钮权限
     fetchButtonRole(){
+        console.log(Config);
         Request.get(Config.api.buttoRoleUrl,(data)=>{
-            // console.warn(data);
+             console.warn(data.top);
+            this.setState({
+                btnArray:data.top,
+            });
             this.fetchShopMail();
         },(error)=>{
             console.warn(error);
@@ -196,6 +200,37 @@ export default class Test1 extends Component {
             </View>
         );
     }
+    //按钮内容
+    _btnsItem = (info) => {
+        // console.warn(this.state.btnArray);
+        if(this.state.btnArray != null){
+            return(
+                <View style={styles.bttonBgStyle}>
+                    <View style={styles.bttonHalfStyle}>
+                       <View style={styles.bttonStyle}>
+                          {/*this.state.btnArray.map(function (item) {*/}
+                              {/*<Image source={{uri:item.realName}} />*/}
+                              {/*// <Text>*/}
+                              {/*//    btObject.funcName*/}
+                              {/*// </Text>*/}
+                          {/*})*/}
+                       </View>
+                    </View>
+                    <View style={styles.bttonHalfStyle}>
+                       <View style={styles.bttonStyle}>
+                        {/*this.state.btnArray.map(function (item) {*/}
+                             {/*<Image source={{uri:item.realName}} />*/}
+                             {/*// <Text>*/}
+                             {/*//   {btObject.funcName},*/}
+                             {/*// </Text>*/}
+                        {/*})*/}
+                       </View>
+                    </View>
+                </View>
+            );
+        }
+    }
+
     _extraUniqueKey(item ,index){
         return "index"+index+item;
     }
@@ -203,6 +238,7 @@ export default class Test1 extends Component {
         var sections = [
             {key:'first', data:[{title:"阿童木"}],renderItem:this._cirecleBannerImgItem},   //可以每个行设置不同的ui风格
             {key:'second', data:[{title:"阿童木"}],renderItem:this._weatherLimitItem},
+            {key:'third', data:[{title:"阿童木"}],renderItem:this._btnsItem},
         ];
         return(
             <View style={{flex:1}}>
@@ -283,6 +319,23 @@ const styles = StyleSheet.create({
         marginRight:15,
         marginLeft:'auto',
         marginBottom:'auto',
-    }
+    },
+    bttonBgStyle:{
+       width:kwidth,
+       height:164,
+       backgroundColor:'#ffffff',
+       flex:1,
+    },
+    bttonHalfStyle:{
+      width:kwidth,
+      height:82,
+      flexDirection:'row',
+    },
+    bttonStyle:{
+      width:kBtnwidth,
+      height:82,
+      flexDirection:'column',
+      backgroundColor:'#ffffff'
+    },
 });
 
