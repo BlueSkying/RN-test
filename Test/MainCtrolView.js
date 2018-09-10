@@ -24,7 +24,6 @@ let loactionID = null;
 var longitude = null;
 var latitude = null;
 const { kwidth , kheight} = Dimensions.get('window');
-const kBtnwidth = kwidth/4;
 export default class Test1 extends Component {
 
     static navigationOptions = ({navigation,screenProps}) => ({
@@ -41,11 +40,15 @@ export default class Test1 extends Component {
         var bannerArray = [];
         var bannerImgUrl = null;
         var btnArray = [];
+        var middleArray = [];
+        var shopMailArray = [];
         this.state = {
             weatherMap:weatherMap,
             bannerArray:bannerArray,
             bannerImgUrl:bannerImgUrl,
             btnArray:btnArray,
+            middleArray:middleArray,
+            shopMailArray:shopMailArray,
         }
     }
 
@@ -57,7 +60,6 @@ export default class Test1 extends Component {
         });
         this.getLongitudeAndLatitude();
         this.fetchBannerAds();
-        // this.fetchButtonRole();
         var conunter = 0;
         setInterval(()=>{
             if(this.state.bannerArray != null) {
@@ -71,7 +73,6 @@ export default class Test1 extends Component {
                         bannerImgUrl:brannerMap.imgUrl,
                     });
                 }
-                // console.warn(brannerMap)
             }else{
                 console.warn('无数据');
             }
@@ -114,7 +115,6 @@ export default class Test1 extends Component {
     //获取banner广告
     fetchBannerAds(){
         Request.post(Config.api.bannerAdsUrl,{'type':'index','projectId':'38562569'},(data)=>{
-            // console.warn(data);
             this.setState({
                bannerArray:data.ads,
             });
@@ -126,20 +126,16 @@ export default class Test1 extends Component {
     //根据经纬度获取天气和现行情况
     fetchWeather(){
        Request.post(Config.api.wetherUrl,{'location':(longitude + "," + latitude)},(data)=>{
-            // weatherMap=data;
             this.setState({
                weatherMap:data,
             });
-            // console.warn(weatherMap);
         },(error)=>{
             console.warn(error);
         });
     }
     //获取按钮权限
     fetchButtonRole(){
-        console.log(Config);
         Request.get(Config.api.buttoRoleUrl,(data)=>{
-             console.warn(data.top);
             this.setState({
                 btnArray:data.top,
             });
@@ -151,7 +147,11 @@ export default class Test1 extends Component {
     //获取通栏广告
     fetchShopMail(){
         Request.post(Config.api.shopMailUrl,{'projectId':'38562569'},(data)=>{
-            // console.warn(data);
+             // console.warn(data);
+             this.setState({
+                middleArray:data.shop,
+                shopMailArray:data.ad,
+             });
         },(error)=>{
             console.warn(error);
         });
@@ -186,9 +186,7 @@ export default class Test1 extends Component {
     }
     //天气预报  限行
     _weatherLimitItem = (info) =>{
-           // console.warn(this.state.weatherMap);
         var xxlimit = this.state.weatherMap.xx;
-        // console.warn(xxlimit);
         return(
             <View style={styles.weatherStyle}>
                 <Text style={styles.cityStyle}>
@@ -202,35 +200,61 @@ export default class Test1 extends Component {
     }
     //按钮内容
     _btnsItem = (info) => {
-        // console.warn(this.state.btnArray);
         if(this.state.btnArray != null){
+            let topArray = this.state.btnArray.slice(0,4);
+            let downArray = this.state.btnArray.slice(4,8);
             return(
                 <View style={styles.bttonBgStyle}>
                     <View style={styles.bttonHalfStyle}>
-                       <View style={styles.bttonStyle}>
-                          {/*this.state.btnArray.map(function (item) {*/}
-                              {/*<Image source={{uri:item.realName}} />*/}
-                              {/*// <Text>*/}
-                              {/*//    btObject.funcName*/}
-                              {/*// </Text>*/}
-                          {/*})*/}
-                       </View>
+                        {topArray.map(function (item) {
+                            return(
+                                <View style={styles.bttonStyle}>
+                                    <Image source={{uri:item.realName?item.realName:''}} style={{width:45,height:45}} />
+                                    <Text>{item.funcName}</Text>
+                                </View>
+                             )
+                        })}
                     </View>
                     <View style={styles.bttonHalfStyle}>
-                       <View style={styles.bttonStyle}>
-                        {/*this.state.btnArray.map(function (item) {*/}
-                             {/*<Image source={{uri:item.realName}} />*/}
-                             {/*// <Text>*/}
-                             {/*//   {btObject.funcName},*/}
-                             {/*// </Text>*/}
-                        {/*})*/}
-                       </View>
+                        {downArray.map(function (item) {
+                            return(
+                                <View style={styles.bttonStyle}>
+                                    <Image source={{uri:item.realName?item.realName:''}} style={{width:45,height:45}} />
+                                    <Text>{item.funcName}</Text>
+                                </View>
+                            )
+                        })}
                     </View>
                 </View>
             );
         }
     }
+    //中部广告
+    _middleShopMai = (info) =>{
+        var leftShop = this.state.middleArray[0];
+        var rightTop = this.state.middleArray[1];
+        var rightDown = this.state.middleArray[2];
+        
+            return (
+                <View style={{width: kwidth, height: 150, flexDirection: 'row'}}>
+                    <View style={{flex: 1}}>
+                        <Image source={{uri: leftShop != null?leftShop.imgUrl:''}} style={{flex: 1, height: 150}}/>
+                    </View>
+                    <View style={{flex: 1, flexDirection: 'column'}}>
+                        <Image source={{uri:rightTop != null?rightTop.imgUrl:''}} style={{flex:1,height:150}}/>
+                        <Image source={{uri:rightDown != null?rightDown.imgUrl:''}} style={{flex:1,height:150}}/>
+                    </View>
+                </View>
+            );
 
+    }
+
+    _setionComp = (info) =>{
+        var txt = info.section.key;
+        return <View style={{height:txt == 'first'?0:10,justifyContent:"center",alignItems:'center'}}>
+
+        </View>
+    }
     _extraUniqueKey(item ,index){
         return "index"+index+item;
     }
@@ -239,10 +263,12 @@ export default class Test1 extends Component {
             {key:'first', data:[{title:"阿童木"}],renderItem:this._cirecleBannerImgItem},   //可以每个行设置不同的ui风格
             {key:'second', data:[{title:"阿童木"}],renderItem:this._weatherLimitItem},
             {key:'third', data:[{title:"阿童木"}],renderItem:this._btnsItem},
+            {key:'four', data:[{title:"阿童木"}],renderItem:this._middleShopMai},
         ];
         return(
             <View style={{flex:1}}>
               <SectionList
+                 renderSectionHeader={this._setionComp}
                  renderItem = {this._renderItem}
                  sections = {sections}
                  ItemSeparatorComponent = {()=><View><Text></Text></View>}
@@ -330,12 +356,15 @@ const styles = StyleSheet.create({
       width:kwidth,
       height:82,
       flexDirection:'row',
+      flex:1,
     },
     bttonStyle:{
-      width:kBtnwidth,
+      width:94,
       height:82,
       flexDirection:'column',
-      backgroundColor:'#ffffff'
+      backgroundColor:'#ffffff',
+      justifyContent:'center',
+      alignItems:'center',
     },
 });
 
