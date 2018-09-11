@@ -147,7 +147,7 @@ export default class Test1 extends Component {
     //获取通栏广告
     fetchShopMail(){
         Request.post(Config.api.shopMailUrl,{'projectId':'38562569'},(data)=>{
-             // console.warn(data);
+              // console.warn(data.ad);
              this.setState({
                 middleArray:data.shop,
                 shopMailArray:data.ad,
@@ -170,9 +170,12 @@ export default class Test1 extends Component {
         goBack();
     }
     _renderItem = (info) => {
+         // console.warn(info.item.imgUrl);
        return(
-           <View>
-
+           <View style={{width:kwidth,height:250,justifyContent:'center',alignItems:'center'}}>
+               <Text style={{color:'#333333',fontSize:15,width:kwidth,height:20}}>{info.item.mainTitle}</Text>
+               <Text style={{color:'#999999',fontSize:12,width:kwidth,height:15}}>{info.item.subTitle}</Text>
+               <Image source={{uri:info.item.imgUrl?info.item.imgUrl:''}} style={{width:kwidth,height:210,}} />
            </View>
        );
     }
@@ -234,7 +237,6 @@ export default class Test1 extends Component {
         var leftShop = this.state.middleArray[0];
         var rightTop = this.state.middleArray[1];
         var rightDown = this.state.middleArray[2];
-        
             return (
                 <View style={{width: kwidth, height: 150, flexDirection: 'row'}}>
                     <View style={{flex: 1}}>
@@ -259,12 +261,21 @@ export default class Test1 extends Component {
         return "index"+index+item;
     }
     render() {
-        var sections = [
-            {key:'first', data:[{title:"阿童木"}],renderItem:this._cirecleBannerImgItem},   //可以每个行设置不同的ui风格
-            {key:'second', data:[{title:"阿童木"}],renderItem:this._weatherLimitItem},
-            {key:'third', data:[{title:"阿童木"}],renderItem:this._btnsItem},
-            {key:'four', data:[{title:"阿童木"}],renderItem:this._middleShopMai},
-        ];
+        var dataarray = [];
+        if (this.state.shopMailArray != null){
+              this.state.shopMailArray.map(function (item) {
+                dataarray.push(item);
+            })
+        }
+        var sections = [];
+            sections.push({key:'first', data:[{title:"阿童木"}],renderItem:this._cirecleBannerImgItem},)
+            sections.push({key:'second', data:[{title:"阿童木"}],renderItem:this._weatherLimitItem},)
+            sections.push({key:'third', data:[{title:"阿童木"}],renderItem:this._btnsItem},)
+            sections.push({key:'four', data:[{title:"阿童木"}],renderItem:this._middleShopMai},)
+            if(dataarray != null){
+                sections.push({key:'five', data:dataarray,renderItem:this._renderItem},)
+            }
+
         return(
             <View style={{flex:1}}>
               <SectionList
@@ -273,6 +284,7 @@ export default class Test1 extends Component {
                  sections = {sections}
                  ItemSeparatorComponent = {()=><View><Text></Text></View>}
                  keyExtractor = {this._extraUniqueKey}// 每个item的key
+                 removeClippedSubviews={false}
               />
             </View>
         );
