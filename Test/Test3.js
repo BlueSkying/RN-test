@@ -16,9 +16,9 @@ import {
     Dimensions,
     ImageBackground,
 } from 'react-native';
-
-const { kwidth , kheight} = Dimensions.get('window');
-
+export const kwidth = Dimensions.get('window').width;
+// 获取设备屏幕高
+export const kheight = Dimensions.get('window').height;
 import Request from './Request';
 import Config from './config';
 const  settingIcon = require('../resources/icon_set.png');
@@ -185,7 +185,6 @@ const styles = StyleSheet.create({
         fontSize:15,
         marginRight:'auto',
         marginLeft:'auto',
-        width:kwidth,
     },
     itemArrow:{
         height:14,

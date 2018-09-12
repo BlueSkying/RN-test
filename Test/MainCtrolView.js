@@ -23,7 +23,10 @@ import Config from './config';
 let loactionID = null;
 var longitude = null;
 var latitude = null;
-const { kwidth , kheight} = Dimensions.get('window');
+// 获取设备屏幕宽
+export const kwidth = Dimensions.get('window').width;
+// 获取设备屏幕高
+export const kheight = Dimensions.get('window').height;
 export default class Test1 extends Component {
 
     static navigationOptions = ({navigation,screenProps}) => ({
@@ -170,12 +173,11 @@ export default class Test1 extends Component {
         goBack();
     }
     _renderItem = (info) => {
-         // console.warn(info.item.imgUrl);
        return(
-           <View style={{width:kwidth,height:250,justifyContent:'center',alignItems:'center'}}>
-               <Text style={{color:'#333333',fontSize:15,width:kwidth,height:20}}>{info.item.mainTitle}</Text>
-               <Text style={{color:'#999999',fontSize:12,width:kwidth,height:15}}>{info.item.subTitle}</Text>
-               <Image source={{uri:info.item.imgUrl?info.item.imgUrl:''}} style={{width:kwidth,height:210,}} />
+           <View style={styles.shopMailBgStyle}>
+               <Text style={{color:'#333333',fontSize:15,height:20,paddingTop:0}}>{info.item.object.mainTitle}</Text>
+               <Text style={{color:'#999999',fontSize:12,height:15,paddingTop:2}}>{info.item.object.subTitle}</Text>
+               <Image source={{uri:info.item.object.imgUrl}} style={styles.shopMailStyle} />
            </View>
        );
     }
@@ -263,8 +265,9 @@ export default class Test1 extends Component {
     render() {
         var dataarray = [];
         if (this.state.shopMailArray != null){
-              this.state.shopMailArray.map(function (item) {
-                dataarray.push(item);
+              var shopArray = this.state.shopMailArray.concat()
+              shopArray.map(function (item) {
+                dataarray.push({key:item.mainTitle,object:item});
             })
         }
         var sections = [];
@@ -338,7 +341,7 @@ const styles = StyleSheet.create({
     banner:{
         backgroundColor:'#ffffff',
         width:kwidth,
-        height:200,
+        height:kwidth/2,
     },
     weatherStyle:{
         backgroundColor:'#ffffff',
@@ -371,12 +374,25 @@ const styles = StyleSheet.create({
       flex:1,
     },
     bttonStyle:{
-      width:94,
+      flex:1,
+      width:kwidth-40/4,
       height:82,
       flexDirection:'column',
       backgroundColor:'#ffffff',
       justifyContent:'center',
       alignItems:'center',
     },
+    shopMailBgStyle:{
+        width:kwidth,
+        height:kwidth*8/15+50+10,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'#ffffff'
+    },
+    shopMailStyle:{
+        width:kwidth,
+        height:kwidth*8/15,
+        marginTop:5,
+    }
 });
 
