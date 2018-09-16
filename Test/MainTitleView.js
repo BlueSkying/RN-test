@@ -9,8 +9,9 @@ import {
     Button,
     TouchableOpacity
 } from 'react-native';
-const { kwidth , kheight} = Dimensions.get('window');
-
+export const kwidth = Dimensions.get('window').width;
+// 获取设备屏幕高
+export const kheight = Dimensions.get('window').height;
 export default class MainTitleView extends Component{
     render(){
         return(

@@ -6,6 +6,7 @@ const Config={
         buttoRoleUrl:"http://weblink.justbon.com/getPicByRoleIdAndType.action?roleid=role_30",
         bannerAdsUrl:"http://jcp.justbon.com/api/ads",
         shopMailUrl:"http://jcp.justbon.com/api/frontAd",
+        boundHouseUrl:"http://jcp.justbon.com/api/commons/getBindHouseInfo",
     },
 };
 

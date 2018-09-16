@@ -19,6 +19,7 @@ import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
 import Request from './Request';
 import Config from './config';
+import HouseExchangeView from './HouseExchangeView'
 //监听定位的id
 let loactionID = null;
 var longitude = null;
@@ -164,8 +165,18 @@ export default class Test1 extends Component {
         alert('点击了扫描按钮')
     }
      //点击了项目切换按钮
-    exchange = ()=>{
-        alert('点击了项目切换按钮')
+    exchange = ()=> {
+        // alert('点击了项目切换按钮'),
+         return(
+            <View style={{flex:1,backgroundColor:'#333333'}}>
+                测试
+                {/*<HouseExchangeView selectHouse = {()=>this._selectHouse(item)} />*/}
+            </View>
+         );
+    };
+
+    _selectHouse = (item)=>{
+       console.warn(item);
     }
 
     navigatePress = () => {
