@@ -17,7 +17,9 @@ import {
     WebView,
 } from 'react-native';
 import Test3 from "./Test3";
-const { kwidth , kheight} = Dimensions.get('window');
+export const kwidth = Dimensions.get('window').width;
+// 获取设备屏幕高
+export const kheight = Dimensions.get('window').height;
 const GankIcon = require('../resources/Gank.png');
 const ShiTuIcon = require('../resources/ShiTu.png');
 

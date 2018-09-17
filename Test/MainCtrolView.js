@@ -34,7 +34,9 @@ export default class Test1 extends Component {
         // 这里面的属性和App.js的navigationOptions是一样的。
         header:(
             <MainTitleView  scan={()=>navigation.state.params?navigation.state.params.scanBrcode():null}
-                            exchange = {()=>navigation.state.params?navigation.state.params.exchangeProject():null}/>
+                            exchange = {()=>navigation.state.params?navigation.state.params.exchangeProject():null}
+                            titleString = {'生活家'}
+            />
         ),
     })
 
@@ -46,6 +48,7 @@ export default class Test1 extends Component {
         var btnArray = [];
         var middleArray = [];
         var shopMailArray = [];
+        var titleString = '生活家';
         this.state = {
             weatherMap:weatherMap,
             bannerArray:bannerArray,
@@ -53,6 +56,8 @@ export default class Test1 extends Component {
             btnArray:btnArray,
             middleArray:middleArray,
             shopMailArray:shopMailArray,
+            isShowPop:true,
+            titleString : titleString,
         }
     }
 
@@ -166,17 +171,13 @@ export default class Test1 extends Component {
     }
      //点击了项目切换按钮
     exchange = ()=> {
-        // alert('点击了项目切换按钮'),
-         return(
-            <View style={{flex:1,backgroundColor:'#333333'}}>
-                测试
-                {/*<HouseExchangeView selectHouse = {()=>this._selectHouse(item)} />*/}
-            </View>
-         );
+         this.setState({
+             isShowPop:true,
+         })
     };
 
-    _selectHouse = (item)=>{
-       console.warn(item);
+    _selectNewHouse = (item)=>{
+        console.warn(item);
     }
 
     navigatePress = () => {
@@ -291,7 +292,7 @@ export default class Test1 extends Component {
             }
 
         return(
-            <View style={{flex:1}}>
+            <View>
               <SectionList
                  renderSectionHeader={this._setionComp}
                  renderItem = {this._renderItem}
@@ -300,8 +301,12 @@ export default class Test1 extends Component {
                  keyExtractor = {this._extraUniqueKey}// 每个item的key
                  removeClippedSubviews={false}
               />
+                <HouseExchangeView  selectHouse = {(item)=>{
+                    console.warn('回传值' + item)
+                }} showView={this.state.isShowPop} />
             </View>
         );
+
         /*
         return (
             <View style={styles.container}>

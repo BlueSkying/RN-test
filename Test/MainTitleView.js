@@ -21,7 +21,7 @@ export default class MainTitleView extends Component{
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.props.exchange}>
                     <Text style={styles.titleStyle}>
-                        生活家
+                        {this.props.titleString}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.props.exchange}>
