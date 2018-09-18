@@ -74,8 +74,8 @@ export default class Test3 extends Component {
     }
 
     _pressRow(item){
-        // alert(item.title);
-        alert(this.state.headImageUrl);
+         alert(item.title);
+        // alert(this.state.headImageUrl);
     }
 
     _renderItem = (info) =>{

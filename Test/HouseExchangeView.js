@@ -5,11 +5,8 @@ import {
     Text,
     View,
     Dimensions,
-    Image,
-    Button,
     TouchableOpacity,
     FlatList,
-    Modal,
 } from 'react-native';
 import Request from './Request';
 import Config from './config';
@@ -21,12 +18,8 @@ export default class HouseExchangeView extends Component {
     constructor(props) {
         super(props);
         let houseDataArray = [];
-        // console.warn(this.props.showView),
         this.state = {
             houseDataArray: houseDataArray,
-            animationType :'none',
-            modalVisible:this.props.showView,
-            transparent : true,
         };
 
     }
@@ -38,13 +31,16 @@ export default class HouseExchangeView extends Component {
     // 获取绑定房屋数据
     fetchData() {
         Request.post(Config.api.boundHouseUrl, {"contactid": "1285858633"}, (data) => {
-            // console.warn(data)
             this.setState({
                 houseDataArray: data.data,
             });
         }, (error) => {
             console.warn(error);
         });
+    }
+
+    _extraUniqueKey(item ,index){
+        return "index"+index+item;
     }
 
     render() {
@@ -54,47 +50,29 @@ export default class HouseExchangeView extends Component {
         }
         return (
         <View>
-            <Modal
-                style={styles.bgstyle}
-                animationType={this.state.animationType}
-                transparent={this.state.transparent}
-                visible={this.state.modalVisible}
-                onRequestClose={()=>{this._setModalVisible(false)}}
-                onShow={()=>{this._startShow()}}
-            >
-               <FlatList
-                  contentContainerStyle={styles.bgstyle}
+                <View style={styles.bgstyle}>
+                  <FlatList
                   data={data}
                   renderItem={({item}) =>
-                     <TouchableOpacity onPress={()=>this._selectHouse(item.object)}>
-                        <Text style={styles.item}>
-                           {item.object.projectName}
-                        </Text>
+                     <TouchableOpacity onPress={()=>this._selectHouse(item)}>
+                         <View>
+                            <Text style={styles.item}>
+                              {item.object.projectName}
+                            </Text>
+                         </View>
                      </TouchableOpacity>
-                }
-                />
-            </Modal>
+                  }
+                  keyExtractor = {this._extraUniqueKey}// 每个item的key
+                  />
+                </View>
         </View>
         )
     }
-
-    _setModalVisible = (visible)=>{
-        this.setState({
-            modalVisible:visible
-        })
-    }
-
-    _startShow = ()=>{
-        this.setState({
-            modalVisible:true
-        })
-    }
     // 回传选中的房屋
     _selectHouse = (item) =>{
-        this.setState({
-            modalVisible:false
-        })
-         this.props.selectHouse(item);
+         let house = item.object;
+         // console.warn('回传值' + house.projectName)
+          this.props.selectHouse(house);
     }
 }
 
@@ -105,6 +83,7 @@ export default class HouseExchangeView extends Component {
                height:144,
                marginLeft:(kwidth-168)/2,
                marginTop:60,
+               borderRadius:8,
            },
            item:{
                color:'#333333',

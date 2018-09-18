@@ -14,6 +14,8 @@ import {
     Image,
     SectionList,
     Dimensions,
+    Modal,
+    TouchableOpacity,
 } from 'react-native';
 import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
@@ -30,15 +32,33 @@ export const kwidth = Dimensions.get('window').width;
 export const kheight = Dimensions.get('window').height;
 export default class Test1 extends Component {
 
-    static navigationOptions = ({navigation,screenProps}) => ({
-        // 这里面的属性和App.js的navigationOptions是一样的。
-        header:(
-            <MainTitleView  scan={()=>navigation.state.params?navigation.state.params.scanBrcode():null}
-                            exchange = {()=>navigation.state.params?navigation.state.params.exchangeProject():null}
-                            titleString = {'生活家'}
-            />
-        ),
-    })
+    static navigationOptions = ({navigation,screenProps}) => {
+        const {params} = navigation.state
+        return ({
+            // 这里面的属性和App.js的navigationOptions是一样的。
+            header: (
+                /*
+                <MainTitleView  scan={()=>navigation.state.params?navigation.state.params.scanBrcode():null}
+                                exchange = {()=>navigation.state.params?navigation.state.params.exchangeProject():null}
+                                titleString = {'生活家'}
+                />
+                */
+                <View style={styles.navContainer}>
+                    <TouchableOpacity onPress={()=>navigation.state.params?navigation.state.params.scanBrcode():null}>
+                        <Image source={require('../resources/in-scan-code.png')} style={styles.leftStyle}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>navigation.state.params?navigation.state.params.exchangeProject():null}>
+                        <Text style={styles.titleStyle}>
+                            {params ? params.title  : "生活家"}
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>navigation.state.params?navigation.state.params.exchangeProject():null}>
+                        <Image source={require('../resources/in-arrow.png')} style={params ?params.title.length < 4?styles.rowStyle:params.title.length < 8?styles.row2Style : styles.row3Style : styles.rowStyle }/>
+                    </TouchableOpacity>
+                </View>
+            ),
+        });
+    }
 
     constructor(props){
         super(props);
@@ -48,7 +68,7 @@ export default class Test1 extends Component {
         var btnArray = [];
         var middleArray = [];
         var shopMailArray = [];
-        var titleString = '生活家';
+        let titleWidth = -120;
         this.state = {
             weatherMap:weatherMap,
             bannerArray:bannerArray,
@@ -56,9 +76,10 @@ export default class Test1 extends Component {
             btnArray:btnArray,
             middleArray:middleArray,
             shopMailArray:shopMailArray,
-            isShowPop:true,
-            titleString : titleString,
+            isShowPop:false,
+            titleWidth:titleWidth,
         }
+        this.props.navigation.setParams({title: "生活家"});
     }
 
     componentDidMount(){
@@ -301,12 +322,23 @@ export default class Test1 extends Component {
                  keyExtractor = {this._extraUniqueKey}// 每个item的key
                  removeClippedSubviews={false}
               />
-                <HouseExchangeView  selectHouse = {(item)=>{
-                    console.warn('回传值' + item)
-                }} showView={this.state.isShowPop} />
+                <Modal
+                    animationType={null}
+                    transparent={true}
+                    visible={this.state.isShowPop}
+                    onRequestClose={()=>{this._setModalVisible(false)}}
+                    onShow={()=>{this._startShow()}}
+                >
+                    <HouseExchangeView  selectHouse = {(item)=>{
+                        // console.warn('回传值' + item.projectName),
+                        this.props.navigation.setParams({title: item.projectName});
+                        this.setState({
+                            isShowPop:false
+                        })
+                     }} showView={this.state.isShowPop} />
+                </Modal>
             </View>
         );
-
         /*
         return (
             <View style={styles.container}>
@@ -332,6 +364,15 @@ export default class Test1 extends Component {
             </View>
         );
         */
+    }
+    _setModalVisible = (visible)=>{
+        this.setState({
+            isShowPop:visible
+        })
+    }
+
+    _startShow = ()=>{
+
     }
 }
 
@@ -409,6 +450,46 @@ const styles = StyleSheet.create({
         width:kwidth,
         height:kwidth*8/15,
         marginTop:5,
+    },
+    navContainer: {
+        width:kwidth,
+        height:64,
+        backgroundColor:'#ffffff',
+        flexDirection:'row',
+    },
+    leftStyle:{
+        marginLeft:15,
+        marginTop:31,
+        width:22,
+        height:22
+    },
+    titleStyle:{
+        marginTop:31,
+        color:"#333333",
+        fontSize:18,
+        textAlign:'center',
+        width:kwidth-(22+15)*2,
+        justifyContent:'center',
+        marginLeft:0,
+        marginRight:'auto',
+    },
+    rowStyle:{
+        width:10,
+        height:10,
+        marginTop:37,
+        marginLeft:-120,
+    },
+    row2Style:{
+        width:10,
+        height:10,
+        marginTop:37,
+        marginLeft:-80,
+    },
+    row3Style:{
+        width:10,
+        height:10,
+        marginTop:37,
+        marginLeft:-40,
     }
 });
 
