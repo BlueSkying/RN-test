@@ -85,7 +85,7 @@ export default class Test1 extends Component {
     componentDidMount(){
         // 通过在componentDidMount里面设置setParams将title的值动态修改
         this.props.navigation.setParams({
-            scanBrcode:this.scan,
+            scanBrcode:this.scanBrcode,
             exchangeProject:this.exchange,
         });
         this.getLongitudeAndLatitude();
@@ -187,8 +187,9 @@ export default class Test1 extends Component {
         });
     }
     //点击了扫描按钮
-    scan = ()=>{
-        alert('点击了扫描按钮')
+    scanBrcode = () =>{
+        const { navigate } = this.props.navigation;
+        navigate('ScanQrcode');
     }
      //点击了项目切换按钮
     exchange = ()=> {

@@ -30,6 +30,7 @@ import Test2 from './Test2.js';
 import Test3 from './Test3.js';
 import Detail1 from './Detail1.js';
 import Detail2 from './Detail2.js';
+import ScanQrcode from './ScanQrcode.js'
 
 const ManinIco = require('../resources/nav_icon_a02.png');
 const neberIcon = require('../resources/nav_icon_b02.png');
@@ -84,7 +85,7 @@ const MyTab = TabNavigator({
         })
     },
     Test2: {
-        screen:Test2,
+        screen:Test1,
         navigationOptions: ()=> TabOptions('邻里',neberIcon,neberIcon,'邻里'),
     },
     Test3:{
@@ -136,8 +137,7 @@ const MyTab = TabNavigator({
 });
 
 
-
-// 初始化StackNavigator
+// 初始化StackNavigator，需要跳转的页面在这里注册
 export default  MyApp = StackNavigator({
     // 将TabNavigator包裹在StackNavigator里面可以保证跳转页面的时候隐藏tabbar
     MyTab:{
@@ -150,6 +150,9 @@ export default  MyApp = StackNavigator({
     Detail2:{
         screen:Detail2,
     },
+    ScanQrcode:{
+        screen:ScanQrcode,
+    }
 
 },{
 
