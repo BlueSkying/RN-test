@@ -68,7 +68,6 @@ export default class Test1 extends Component {
         var btnArray = [];
         var middleArray = [];
         var shopMailArray = [];
-        let titleWidth = -120;
         this.state = {
             weatherMap:weatherMap,
             bannerArray:bannerArray,
@@ -77,7 +76,6 @@ export default class Test1 extends Component {
             middleArray:middleArray,
             shopMailArray:shopMailArray,
             isShowPop:false,
-            titleWidth:titleWidth,
         }
         this.props.navigation.setParams({title: "生活家"});
     }
@@ -189,7 +187,10 @@ export default class Test1 extends Component {
     //点击了扫描按钮
     scanBrcode = () =>{
         const { navigate } = this.props.navigation;
-        navigate('ScanQrcode');
+        navigate('ScanQrcode',{callback:((info) =>{
+            alert(info);
+            })
+        });
     }
      //点击了项目切换按钮
     exchange = ()=> {
@@ -229,7 +230,9 @@ export default class Test1 extends Component {
         return(
             <View style={styles.weatherStyle}>
                 <Text style={styles.cityStyle}>
-                    {this.state.weatherMap.city +'        '+ this.state.weatherMap.weather +'      '+ this.state.weatherMap.cTemperature +'℃'}
+                    {
+                        this.state.weatherMap.city +'        '+ this.state.weatherMap.weather +'      '+ this.state.weatherMap.cTemperature +'℃'
+                    }
                 </Text>
                 <Text style={styles.limitStyle}>
                     {'车辆限行    ' + ((!xxlimit)?'--':xxlimit.xxnum)}

@@ -45,13 +45,17 @@ export default class ScanQrcode extends React.Component{
     componentWillUnmount(){
         this.state.show = false;
     }
-    //扫描二维码方法
+    //扫描二维码结果返回方法
     barcodeReceived = (e) =>{
         if(this.state.show){
             this.state.show = false;
             if (e) {
-                this.props.navigator.pop()
-                this.props.ReceiveCode(e.data)
+                const { goBack } = this.props.navigation;
+                goBack();
+                if(this.props.navigation.state.params.callback){
+                    this.props.navigation.state.params.callback(e.data)
+                }
+                // this.props.ReceiveCode(e.data)
             } else {
                 Alert.alert(
                     '提示',
@@ -74,15 +78,16 @@ export default class ScanQrcode extends React.Component{
                     style={styles.preview}
                     aspect={this.state.camera.aspect}
                     onBarCodeRead={this.barcodeReceived.bind(this)}
-                    barCodeTypes = {['qr']}
+                    // barCodeTypes = {['qr']}
+
                 >
                     <View style = {{height: Platform.OS == 'ios' ? (height-264)/3:(height-244)/3,width:width,backgroundColor:'rgba(0,0,0,0.5)',}}>
                     </View>
                     <View style={{flexDirection:'row'}}>
-                        <View style={styles.itemStyle}/>
-                        <ImageBackground style={styles.rectangle}
+                        <View style={styles.itemStyle}/>  //扫描框左边空白
+                        <ImageBackground style={styles.rectangle}  //扫描背景边框
                                 source={require('../resources/qr_scan_line.png')}>
-                            <Animated.View style={[styles.animatiedStyle, {
+                            <Animated.View style={[styles.animatiedStyle, {     //扫描的上下滚动条
                                 transform: [{
                                     translateY: this.state.anim.interpolate({
                                         inputRange: [0,1],
@@ -92,7 +97,7 @@ export default class ScanQrcode extends React.Component{
                             }]}>
                             </Animated.View>
                         </ImageBackground>
-                        <View style={styles.itemStyle}/>
+                        <View style={styles.itemStyle}/>   //扫描框右边空白
                     </View>
                     <View style={{flex:1,backgroundColor:'rgba(0, 0, 0, 0.5)',width:width,alignItems:'center'}}>
                         <Text style={styles.textStyle}>将二维码放入框内,即可自动扫描</Text>
