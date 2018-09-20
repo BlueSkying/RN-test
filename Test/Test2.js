@@ -15,6 +15,7 @@ import {
     DeviceEventEmitter,
     Dimensions,
     WebView,
+    Linking,
 } from 'react-native';
 import Test3 from "./Test3";
 export const kwidth = Dimensions.get('window').width;
@@ -88,6 +89,22 @@ export default class Test2 extends Component {
         alert('点击headerRight');
     }
 
+    //拨打电话
+    linking=(url)=>{
+
+        console.log(url);
+
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                console.log('Can\'t handle url: ' + url);
+            } else {
+                return Linking.openURL(url);
+            }
+        }).catch(err => console.error('An error occurred', err));
+
+    }
+
+
     render() {
         bar()
         return (
@@ -111,6 +128,20 @@ export default class Test2 extends Component {
                                         {<ActivityIndicator size='large' color='#0000ff'/>}
                                       </View>)
                          }}
+                         onShouldStartLoadWithRequest={(event)=>{
+                                if(event.url.includes('tel:')){
+                                    this.linking(event.uri)
+                                    return false
+                                }else if(event.url.includes('www.vmcshop.com')){
+                                    return false
+                                }else if(event.url.includes('.mall.justbon')){
+                                    console.warn(event.url)
+                                    return false
+                                }else{
+                                    return true
+                                }
+                             }
+                         }
                 />
             </View>
         );
