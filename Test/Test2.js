@@ -17,7 +17,7 @@ import {
     WebView,
     Linking,
 } from 'react-native';
-import Test3 from "./Test3";
+
 export const kwidth = Dimensions.get('window').width;
 // 获取设备屏幕高
 export const kheight = Dimensions.get('window').height;
@@ -64,6 +64,14 @@ export default class Test2 extends Component {
         },
     })
 
+    constructor(props){
+        super(props)
+        let h5url = null
+        this.state = {
+            h5url:h5url,
+        }
+    }
+
     componentWillUnmount(){
         this.subscription.remove();
     };
@@ -91,19 +99,15 @@ export default class Test2 extends Component {
 
     //拨打电话
     linking=(url)=>{
-
-        console.log(url);
-
-        Linking.canOpenURL(url).then(supported => {
-            if (!supported) {
-                console.log('Can\'t handle url: ' + url);
-            } else {
-                return Linking.openURL(url);
-            }
-        }).catch(err => console.error('An error occurred', err));
-
+        Linking.openURL(url);
     }
 
+    //跳转新页面
+    toNewWebView = (url) =>{
+        console.warn(url)
+        const { navigate } = this.props.navigation;
+        navigate('WebViewVCN',{h5url:url});
+    }
 
     render() {
         bar()
@@ -111,22 +115,20 @@ export default class Test2 extends Component {
             <View style={styles.container}>
                 <WebView scalesPageToFit={true}
                          bounces={false}
-                         source={{uri:"http://mall.justbon.com.cn/m/project.html?uid=1285858633&userToken=CA1FC79A7910241C1479B3ABADD1EB2B"}}
+                         source={{url:"http://mall.justbon.com.cn/m/project.html?uid=1285858633&userToken=CA1FC79A7910241C1479B3ABADD1EB2B"}}
                          style={styles.webSize}
                          onLoad={(e)=>console.log('load')}
                          onLoadEnd={(e)=>console.log('onloadend')}
+                         startInLoadingState={true}
+                         thirdPartyCookiesEnabled={false}
                          onLoadStart={(e)=>{
-                             return (<View style={[styles.container,styles.horizontal]}>
-                                        <ActivityIndicator size='large' color='#0000ff'/>
-                                     </View>)
+                             return null
                          }}
                          renderError={()=>{
                              return(<View><Text>renderError回调了，出现错误</Text></View>)
                          }}
                          renderLoading={()=>{
-                              return (<View style={[styles.container,styles.horizontal]}>
-                                        {<ActivityIndicator size='large' color='#0000ff'/>}
-                                      </View>)
+                             return(<View><Text>加载中....</Text></View>)
                          }}
                          onShouldStartLoadWithRequest={(event)=>{
                                 if(event.url.includes('tel:')){
@@ -134,8 +136,10 @@ export default class Test2 extends Component {
                                     return false
                                 }else if(event.url.includes('www.vmcshop.com')){
                                     return false
-                                }else if(event.url.includes('.mall.justbon')){
-                                    console.warn(event.url)
+                                }else if(event.url.includes('project_id=') || event.url.includes('m/project-1')){
+                                    return true
+                                }else if(event.url.includes('.mall.justbon') && !(event.url.includes('mall.justbon.com.cn/m/project.html?')) && !(event.url.includes('api.map.baidu.com/res/staticPages'))){
+                                    this.toNewWebView(event.url)
                                     return false
                                 }else{
                                     return true
