@@ -30,8 +30,8 @@ export default class WebViewVCN extends Component {
                          bounces={false}
                          source={{url: this.props.navigation.state.params.h5url}}
                          style={styles.webSize}
-                         onLoad={(e) => console.log('load')}
-                         onLoadEnd={(e) => console.log('onloadend')}
+                         onLoad={(e) => console.warn('load')}
+                         onLoadEnd={(e) => console.warn('onloadend')}
                          onLoadStart={(e) => {
                              return (<View style={[styles.container, styles.horizontal]}>
                                  <ActivityIndicator size='large' color='#0000ff'/>
@@ -46,7 +46,7 @@ export default class WebViewVCN extends Component {
                              </View>)
                          }}
                          onShouldStartLoadWithRequest={(event) => {
-                             console.warn(event.url);
+                             console.warn(event);
                              if (event.url.includes('tel:')) {   //tel:028-87852242
                                  this.linking(event.url)
                                  return false
