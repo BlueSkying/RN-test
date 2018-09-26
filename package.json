@@ -4,9 +4,16 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "eject": "react-native eject",
+    "npm install": "npm install",
+    "delete the node_modules": "rm -rf node_modules",
+    "reset packager cache": "rm -fr $TMPDIR/react-* or node_modules/react-native/packager/packager.sh --reset-cache",
+    "clear watchman watches": "watchman watch-del-all"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "ajv": "^4.10.0",
     "eslint": "^3.19.0",
     "react": "16.3.1",
     "react-native": "0.55.4",
@@ -20,8 +27,8 @@
   },
   "devDependencies": {
     "babel-jest": "23.2.0",
-    "babel-preset-react-native": "4.0.0",
     "jest": "23.2.0",
+    "babel-preset-react-native": "4.0.0",
     "react-test-renderer": "16.3.1"
   },
   "jest": {

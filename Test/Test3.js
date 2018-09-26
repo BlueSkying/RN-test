@@ -70,7 +70,9 @@ export default class Test3 extends Component {
     }
 
     navigatePress = () => {
-        alert('点击headerRight');
+        // alert('点击headerRight');
+        const { navigate } = this.props.navigation;
+        navigate('LoginVCN');
     }
 
     _pressRow(item){
