@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>需要使用相机去扫描二维码和拍摄照片，否则不能使用该功能</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>嘉宝生活家-RN</string>
+	<string>嘉宝生活家rn</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -39,10 +37,12 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>需要使用定位去获取当前用户城市，获取天气和限行号码，否则不能得到</string>
+	<key>NSCameraUsageDescription</key>
+	<string>该app使用相机拍摄二维码</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>需要使用定位去获取当前用户城市，获取天气和限行号码，否则不能得到</string>
+	<string></string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

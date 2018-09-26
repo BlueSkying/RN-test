@@ -4,22 +4,22 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React, { Component } from 'react'; 
+import { 
+    AppRegistry, 
+    StyleSheet, 
+    Text, 
+    View } from 'react-native';
 
 import App from './Test/App.js';
 
 export default class ReactNavigationDemo extends Component {
-  render() {
-    return (
-     <App  />
-    );
-  }
+    render() { 
+      return (
+      <App /> 
+    ); 
+  } 
 }
 
 AppRegistry.registerComponent('AwesomeProject', () => ReactNavigationDemo);
+
