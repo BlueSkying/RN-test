@@ -7,10 +7,10 @@ import {
     Image,
     Dimensions,
     TouchableOpacity,
-    // AsyncStorage,
+     AsyncStorage,
     TextInput,
 } from 'react-native';
-/*
+
  import Storage from 'react-native-storage';
 var storge = new Storage({
     size:1000,
@@ -19,7 +19,7 @@ var storge = new Storage({
     enableCache:null,
 })
 global.storage = storge
-*/
+
 export const kwidth = Dimensions.get('window').width;
 // 获取设备屏幕高
 export const kheight = Dimensions.get('window').height;
@@ -33,7 +33,6 @@ export default class LoginVCN extends Component{
             dataList: this.loadFromLocal(),
         }
     }
-    /*
         componentDidMount() {
             global.storage.save({
                 key:'token',
@@ -55,7 +54,7 @@ export default class LoginVCN extends Component{
                 dataList:list
             })
         }
-    */
+
     //关闭本页面
     closeLogin = ()=>{
 
@@ -85,6 +84,7 @@ export default class LoginVCN extends Component{
                     <TextInput style={{height:40,borderColor:'gray',borderWidth:1}}
                                onChangeText={(text)=>this.setState({nameText})}
                                value={this.state.nameText}
+                               placeholder='请输入用户账号'
                                defaultValue={'请输入用户账号'}
                                clearButtonMode={'while-editing'}
                     />
