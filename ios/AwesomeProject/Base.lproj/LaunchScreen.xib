@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14111" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -15,12 +15,17 @@
             <rect key="frame" x="0.0" y="0.0" width="750" height="1136"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="6401136" translatesAutoresizingMaskIntoConstraints="NO" id="4M2-XG-41N">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="6401136" translatesAutoresizingMaskIntoConstraints="NO" id="J2y-Qp-PS8">
                     <rect key="frame" x="0.0" y="0.0" width="750" height="1136"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="J2y-Qp-PS8" secondAttribute="bottom" id="7u6-Rc-dPv"/>
+                <constraint firstItem="J2y-Qp-PS8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="FmM-ER-9ZS"/>
+                <constraint firstItem="J2y-Qp-PS8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="XYv-lq-tZc"/>
+                <constraint firstAttribute="trailing" secondItem="J2y-Qp-PS8" secondAttribute="trailing" id="vEN-Lh-v2g"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="548" y="455"/>

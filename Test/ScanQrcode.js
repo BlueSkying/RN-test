@@ -13,21 +13,20 @@ import {
     Dimensions,
 }from 'react-native';
 import Camera from 'react-native-camera';
-var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
 export default class ScanQrcode extends React.Component{
-     constructor(props){
-         super(props);
-         this.camera = null;
-         this.state = {
-             show:true,
-             anim: new Animated.Value(0),
-             camera: {
-                 aspect: Camera.constants.Aspect.fill,
-             },
-         };
-     }
+    constructor(props){
+        super(props);
+        this.camera = null;
+        this.state = {
+            show:true,
+            anim: new Animated.Value(0),
+            camera: {
+                aspect: Camera.constants.Aspect.fill,
+            },
+        };
+    }
     componentDidMount(){
         InteractionManager.runAfterInteractions(()=>{
             this.startAnimation()
@@ -87,7 +86,7 @@ export default class ScanQrcode extends React.Component{
                     <View style={{flexDirection:'row'}}>
                         <View style={styles.itemStyle}/>  //扫描框左边空白
                         <ImageBackground style={styles.rectangle}  //扫描背景边框
-                                source={require('../resources/qr_scan_line.png')}>
+                                         source={require('../resources/qr_scan_line.png')}>
                             <Animated.View style={[styles.animatiedStyle, {     //扫描的上下滚动条
                                 transform: [{
                                     translateY: this.state.anim.interpolate({
