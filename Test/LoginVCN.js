@@ -103,6 +103,7 @@ export default class LoginVCN extends Component{
                                value={this.state.nameText}
                                placeholder='请输入手机号'
                                clearButtonMode={'while-editing'}
+                               keyboardType='numeric'
                     />
                 </View>
                 <View style={styles.inputDowslineStyle}>
@@ -114,10 +115,11 @@ export default class LoginVCN extends Component{
                         密码：
                     </Text>
                     <TextInput style={styles.inputStyle}
-                               onChangeText={(text)=>this.setState({nameText})}
+                               onChangeText={(text)=>this.setState({passText})}
                                value={this.state.nameText}
                                placeholder='请输入密码'
                                clearButtonMode={'while-editing'}
+                               secureTextEntry={true}
                     />
                 </View>
                 <View style={styles.inputDowslineStyle}>
@@ -125,7 +127,7 @@ export default class LoginVCN extends Component{
                 </View>
                 <View style={{marginTop:30}}>
                       <TouchableOpacity onPress={this.Login}>
-                          <View style={styles.bttonBgStyle}>
+                          <View style={styles.btnBgStyle}>
                              <Text style={styles.loginBtnStyel}>
                                 登 录
                              </Text>
@@ -176,11 +178,7 @@ const styles = StyleSheet.create({
     btnBgStyle:{
         width:kwidth-30,
         height:50,
-        paddingTop:15,
-        textAlign:'center',
-        fontSize:16,
         backgroundColor:'#2bb2c1',
-        color:'#ffffff',
         borderRadius:40,
         marginLeft:15
     },
