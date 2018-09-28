@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
      AsyncStorage,
     TextInput,
+    colors,
 } from 'react-native';
 
  import Storage from 'react-native-storage';
@@ -81,13 +82,13 @@ export default class LoginVCN extends Component{
         return(
             <View size={{flex:1}}>
                 <TouchableOpacity onPress={this.closeLogin}>
-                    <Image style={{width:40,height:40,marginLeft:5,marginTop:15}}
+                    <Image style={styles.closeStyle}
                            source={require('../resources/close.png')}
                     />
                 </TouchableOpacity>
 
-                <View style={{width:kwidth,height:100,justifyContent:'center',alignItems:'center',marginTop:50}}>
-                    <Image style={{width:80,height:80,marginTop:10,marginLeft:'auto',marginRight:'auto'}}
+                <View style={styles.iconStyle}>
+                    <Image style={styles.iconImageStyle}
                            source={require('../resources/login_logo_icon.png')}
                     />
                 </View>
@@ -97,14 +98,14 @@ export default class LoginVCN extends Component{
                     <Text style={{marginLeft:15,marginTop:10}}>
                         手机号码：
                     </Text>
-                    <TextInput style={{height:40,borderColor:'gray',borderWidth:0,marginRight:20}}
+                    <TextInput style={styles.inputStyle}
                                onChangeText={(text)=>this.setState({nameText})}
                                value={this.state.nameText}
                                placeholder='请输入手机号'
                                clearButtonMode={'while-editing'}
                     />
                 </View>
-                <View style={{marginLeft:15, width:kwidth-30,height:1,backgroundColor:'#2bb2c1'}}>
+                <View style={styles.inputDowslineStyle}>
 
                 </View>
 
@@ -112,21 +113,23 @@ export default class LoginVCN extends Component{
                     <Text style={{marginLeft:15,marginTop:10}}>
                         密码：
                     </Text>
-                    <TextInput style={{height:40,borderColor:'gray',borderWidth:0,marginLeft:30}}
+                    <TextInput style={styles.inputStyle}
                                onChangeText={(text)=>this.setState({nameText})}
                                value={this.state.nameText}
                                placeholder='请输入密码'
                                clearButtonMode={'while-editing'}
                     />
                 </View>
-                <View style={{marginLeft:15, width:kwidth-30,height:1,backgroundColor:'#2bb2c1'}}>
+                <View style={styles.inputDowslineStyle}>
 
                 </View>
                 <View style={{marginTop:30}}>
                       <TouchableOpacity onPress={this.Login}>
-                          <Text style={{width:kwidth-30,height:50,paddingTop:15,textAlign:'center',fontsize:16, backgroundColor:'#2bb2c1',color:'#ffffff',borderRadius:20,marginLeft:15}}>
-                              登 录
-                          </Text>
+                          <View style={styles.bttonBgStyle}>
+                             <Text style={styles.loginBtnStyel}>
+                                登 录
+                             </Text>
+                          </View>
                       </TouchableOpacity>
                 </View>
             </View>
@@ -137,4 +140,58 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    closeStyle:{
+        width:40,
+        height:40,
+        marginLeft:5,
+        marginTop:15
+    },
+    iconStyle:{
+        width:kwidth,
+        height:100,
+        justifyContent:'center',
+        alignItems:'center',
+        marginTop:50
+    },
+    iconImageStyle:{
+        width:80,
+        height:80,
+        marginTop:10,
+        marginLeft:'auto',
+        marginRight:'auto'
+    },
+    inputStyle:{
+        height:40,
+        borderColor:'gray',
+        borderWidth:0,
+        marginRight:20
+    },
+    inputDowslineStyle:{
+        marginLeft:15,
+        width:kwidth-30,
+        height:1,
+        backgroundColor:'#2bb2c1',
+        marginTop:0.5
+    },
+    btnBgStyle:{
+        width:kwidth-30,
+        height:50,
+        paddingTop:15,
+        textAlign:'center',
+        fontSize:16,
+        backgroundColor:'#2bb2c1',
+        color:'#ffffff',
+        borderRadius:40,
+        marginLeft:15
+    },
+    loginBtnStyel:{
+        width:kwidth-30,
+        height:50,
+        paddingTop:15,
+        textAlign:'center',
+        fontSize:16,
+        backgroundColor: 'transparent',
+        color:'#ffffff',
+        marginLeft:15
+    }
 });
