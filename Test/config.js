@@ -7,6 +7,7 @@ const Config={
         bannerAdsUrl:"http://jcp.justbon.com/api/ads",
         shopMailUrl:"http://jcp.justbon.com/api/frontAd",
         boundHouseUrl:"http://jcp.justbon.com/api/commons/getBindHouseInfo",
+        loginUrl:"http://jcp.justbon.com/api/customer/userLogin",
     },
 };
 

@@ -10,8 +10,10 @@ import {
      AsyncStorage,
     TextInput,
     colors,
+    AlertIOS,
 } from 'react-native';
-
+import Request from './Request';
+import Config from './config';
  import Storage from 'react-native-storage';
 var storge = new Storage({
     size:1000,
@@ -34,9 +36,11 @@ export default class LoginVCN extends Component{
 
     constructor(props){
         super(props)
+        let nameText = '';
+        let passText = '';
         this.state = {
-            nameText:'',
-            passText:'',
+            nameText:nameText,
+            passText:passText,
             dataList: this.loadFromLocal(),
         }
     }
@@ -71,7 +75,22 @@ export default class LoginVCN extends Component{
 
     //登录接口
     Login = ()=>{
+        let name = String(this.state.nameText)
+        if(name == null || name.length!= 11){
+            AlertIOS.alert('提示','请输入正确的手机号码',[{text:'确定', onPress:() => {}, style : 'cancel'}])
+            return;
+        }
+        let password = String(this.state.passText)
+        if(password.length == 0){
+            AlertIOS.alert('提示','请输入密码',[{text:'确定', onPress:() => {}, style : 'cancel'}])
+            return;
+        }
 
+        Request.post(Config.api.loginUrl,{'params':{'loginName':name,'password':password,'xingeToken':''}},(data)=>{
+            console.warn(data)
+        },(error)=>{
+            console.warn(error);
+        });
     }
 
     componentWillUnmount() {
@@ -99,7 +118,7 @@ export default class LoginVCN extends Component{
                         手机号码：
                     </Text>
                     <TextInput style={styles.inputStyle}
-                               onChangeText={(text)=>this.setState({nameText})}
+                               onChangeText={(text)=>this.setState({nameText:text})}
                                value={this.state.nameText}
                                placeholder='请输入手机号'
                                clearButtonMode={'while-editing'}
@@ -115,8 +134,8 @@ export default class LoginVCN extends Component{
                         密码：
                     </Text>
                     <TextInput style={styles.inputStyle}
-                               onChangeText={(text)=>this.setState({passText})}
-                               value={this.state.nameText}
+                               onChangeText={(text)=>this.setState({passText:text})}
+                               value={this.state.passText}
                                placeholder='请输入密码'
                                clearButtonMode={'while-editing'}
                                secureTextEntry={true}
