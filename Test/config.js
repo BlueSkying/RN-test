@@ -8,6 +8,7 @@ const Config={
         shopMailUrl:"http://jcp.justbon.com/api/frontAd",
         boundHouseUrl:"http://jcp.justbon.com/api/commons/getBindHouseInfo",
         loginUrl:"http://jcp.justbon.com/api/customer/userLogin",
+        queryBeam:"http://openapi.justbon.cn/api/scarlettBean/queryScarlettBeam",
     },
 };
 

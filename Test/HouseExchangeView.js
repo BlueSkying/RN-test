@@ -30,7 +30,7 @@ export default class HouseExchangeView extends Component {
 
     // 获取绑定房屋数据
     fetchData() {
-        Request.post(Config.api.boundHouseUrl, {"contactid": "1285858633"}, (data) => {
+        Request.post(Config.api.boundHouseUrl, {"contactid": this.props.userId}, (data) => {
             this.setState({
                 houseDataArray: data.data,
             });

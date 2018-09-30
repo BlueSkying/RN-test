@@ -33,6 +33,7 @@ import Detail2 from './Detail2.js';
 import ScanQrcode from './ScanQrcode.js'
 import WebViewVCN from './WebViewVCN.js'
 import LoginVCN from './LoginVCN.js'
+import SettingVCN from "./SettingVCN";
 
 const ManinIco = require('../resources/nav_icon_a02.png');
 const neberIcon = require('../resources/nav_icon_b02.png');
@@ -160,6 +161,9 @@ export default  MyApp = StackNavigator({
     },
     LoginVCN:{
         screen:LoginVCN,
+    },
+    SettingVCN:{
+        screen:SettingVCN,
     }
 
 },{

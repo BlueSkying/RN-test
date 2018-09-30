@@ -11,6 +11,7 @@ import {
     TextInput,
     colors,
     AlertIOS,
+    ScrollView,
 } from 'react-native';
 import Request from './Request';
 import Config from './config';
@@ -38,32 +39,25 @@ export default class LoginVCN extends Component{
         super(props)
         let nameText = '';
         let passText = '';
+        let userID = '';
         this.state = {
             nameText:nameText,
             passText:passText,
-            dataList: this.loadFromLocal(),
+            userID : userID,
         }
     }
 
     componentDidMount() {
-            global.storage.save({
-                key:'token',
-                data:'data.token',  //取回来存储的数据
-                expires:null
-            })
-
-            let token = global.storage.load({   //取存储的数据
-                key:'token'
-            })
+        this.loadFromLocal()
     }
 
         //加载本地缓存数据
     loadFromLocal = async()=>{
-            let list = await  storge.load({
-                key:'recommendList'
+            let phone = await  storge.load({
+                key:'userInfo'
             })
             this.setState({
-                dataList:list
+                nameText:phone['phone']
             })
     }
 
@@ -71,6 +65,9 @@ export default class LoginVCN extends Component{
     closeLogin = ()=>{
         const { goBack } = this.props.navigation;
         goBack();
+        if(this.props.navigation.state.params.callback){
+            this.props.navigation.state.params.callback(this.state.userID)
+        }
     }
 
     //登录接口
@@ -85,9 +82,23 @@ export default class LoginVCN extends Component{
             AlertIOS.alert('提示','请输入密码',[{text:'确定', onPress:() => {}, style : 'cancel'}])
             return;
         }
-
+        //登录成功，需保存数据,然后返回
         Request.post(Config.api.loginUrl,{'params':{'loginName':name,'password':password,'xingeToken':''}},(data)=>{
-            console.warn(data)
+            let jsonData = data;
+            storage.save({
+                key:'recommendList',
+                data:jsonData,
+                expires:null,
+            }),
+            storage.save({
+                key:'userInfo',
+                data:{'phone':this.state.nameText},
+                expires:null,
+            })
+            this.setState({
+                 userID : jsonData['data']['contactId'],
+            })
+            this.closeLogin();
         },(error)=>{
             console.warn(error);
         });
@@ -99,6 +110,7 @@ export default class LoginVCN extends Component{
 
     render(){
         return(
+            <ScrollView>
             <View size={{flex:1}}>
                 <TouchableOpacity onPress={this.closeLogin}>
                     <Image style={styles.closeStyle}
@@ -117,7 +129,7 @@ export default class LoginVCN extends Component{
                     <Text style={{marginLeft:15,marginTop:10}}>
                         手机号码：
                     </Text>
-                    <TextInput style={styles.inputStyle}
+                    <TextInput style={styles.phoneInputStyle}
                                onChangeText={(text)=>this.setState({nameText:text})}
                                value={this.state.nameText}
                                placeholder='请输入手机号'
@@ -133,7 +145,7 @@ export default class LoginVCN extends Component{
                     <Text style={{marginLeft:15,marginTop:10}}>
                         密码：
                     </Text>
-                    <TextInput style={styles.inputStyle}
+                    <TextInput style={styles.passInputStyle}
                                onChangeText={(text)=>this.setState({passText:text})}
                                value={this.state.passText}
                                placeholder='请输入密码'
@@ -154,6 +166,7 @@ export default class LoginVCN extends Component{
                       </TouchableOpacity>
                 </View>
             </View>
+            </ScrollView>
         )
     }
   }
@@ -181,11 +194,18 @@ const styles = StyleSheet.create({
         marginLeft:'auto',
         marginRight:'auto'
     },
-    inputStyle:{
+    phoneInputStyle:{
         height:40,
         borderColor:'gray',
         borderWidth:0,
-        marginRight:20
+        width:kwidth-100,
+    },
+    passInputStyle:{
+        height:40,
+        borderColor:'gray',
+        borderWidth:0,
+        width:kwidth-100,
+        marginLeft:26,
     },
     inputDowslineStyle:{
         marginLeft:15,

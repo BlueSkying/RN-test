@@ -21,6 +21,7 @@ export const kwidth = Dimensions.get('window').width;
 export const kheight = Dimensions.get('window').height;
 import Request from './Request';
 import Config from './config';
+import SettingVCN from "./SettingVCN";
 const  settingIcon = require('../resources/icon_set.png');
 export default class Test3 extends Component {
     static navigationOptions = ({navigation,screenProps}) => ({
@@ -39,14 +40,29 @@ export default class Test3 extends Component {
     })
     // component挂载完毕后调用
     componentDidMount(){
-        this.fetchData();
+        this.loadFromLocal()
         this.props.navigation.setParams({   //右键按钮需要注册
             navigatePress:this.navigatePress,
         });
     }
 
+    //加载本地缓存数据
+    loadFromLocal = async()=>{
+        let oldData = await  global.storage.load({
+            key:'recommendList'
+        })
+        this.setState({
+            userID:oldData['data']['contactId'],
+            userToken:oldData['token'],
+        })
+
+        this.fetchData();
+        this.queryScaleBeam();
+    }
+
+    // 获取用户头像信息
     fetchData(){
-        Request.post(Config.api.homeList,{'sCommandName':'getMember','sInput':{"ID":'1285858633'}},(data)=>{
+        Request.post(Config.api.homeList,{'sCommandName':'getMember','sInput':{"ID":this.state.userID}},(data)=>{
             this.setState({
                 headImageUrl:data.Item.sHeadImg,
                 nickName:data.Item.sNickName,
@@ -55,7 +71,16 @@ export default class Test3 extends Component {
            console.warn(error);
         });
     }
-
+    // 获取用户嘉豆
+    queryScaleBeam(){
+        Request.post(Config.api.queryBeam,{'requestData':{'userId':this.state.userID,'token':this.state.userToken}},(data)=>{
+            this.setState({
+                jiadouCount:data["resultData"]["total"],
+            });
+        },(error)=>{
+            console.warn(error);
+        });
+    }
     constructor(props){
         super(props);
         imageArray = [require('../resources/my_icon_01.png'),require('../resources/my_icon_02.png'),require('../resources/my_icon_03.png'),require('../resources/my_icon_04.png')
@@ -63,21 +88,49 @@ export default class Test3 extends Component {
             ,require('../resources/my_icon_09.png'),require('../resources/my_icon_10.png'),require('../resources/my_icon_11.png'),require('../resources/my_icon_12.png')];
         let headImageUrl = '';
         let nickName = '生活家';
+        let userID = null;
+        let userToken = '';
+        let jiadouCount = '';
         this.state = {
             headImageUrl :headImageUrl,
             nickName : nickName,
+            userID : userID,
+            userToken : userToken,
+            jiadouCount : jiadouCount,
         };
     }
-
+    SettingVCN
     navigatePress = () => {
         // alert('点击headerRight');
         const { navigate } = this.props.navigation;
-        navigate('LoginVCN');
+        navigate('SettingVCN',{callback:((info) =>{
+                this.setState({
+                    headImageUrl : '',
+                    nickName : '生活家',
+                    userID : null,
+                    userToken : '',
+                    jiadouCount : '',
+                })
+            })
+        });
+    }
+
+    login(){
+        const { navigate } = this.props.navigation;
+        navigate('LoginVCN',{callback:((info) =>{
+                this.setState({
+                    userID:info,
+                })
+                this.fetchData();
+                this.queryScaleBeam();
+            })
+        });
     }
 
     _pressRow(item){
-         alert(item.title);
-        // alert(this.state.headImageUrl);
+        if(this.state.userID == null){
+            this.login()
+        }
     }
 
     _renderItem = (info) =>{
@@ -98,10 +151,10 @@ export default class Test3 extends Component {
                   <Image source={this.state.headImageUrl.length>0?{uri:this.state.headImageUrl}:require('../resources/my_head.png')} style={styles.headImage} />
                   <Text style={styles.headerTitleName}>{this.state.nickName}</Text>
                   <ImageBackground source={require('../resources/filter40.png')} style={{flex:1,
-                      flexDirection:'row',width:100,height:20,marginLeft:'auto',marginRight:'auto'}}>
-                      <Image source={require('../resources/jiadou_icon.png')} style={{flex:1,height:13,marginLeft:5,marginTop:3}} />
-                      <Text style={styles.jiadouTitle}>43824个</Text>
-                      <Image source={require("../resources/jiadou_arrow.png")} style={{flex:1,height:13,marginRight:5,marginTop:3}} />
+                      flexDirection:'row',width:100,height:25,marginLeft:'auto',marginRight:'auto'}}>
+                      <Image source={require('../resources/jiadou_icon.png')} style={{flex:1,height:13,marginLeft:5,marginTop:6}} />
+                      <Text style={styles.jiadouTitle}>{this.state.jiadouCount} 个</Text>
+                      <Image source={require("../resources/jiadou_arrow.png")} style={{flex:1,height:13,marginRight:5,marginTop:6}} />
                   </ImageBackground>
               </ImageBackground>
           </View>
@@ -156,7 +209,8 @@ const styles = StyleSheet.create({
     jiadouTitle:{
         flex:4,
         height:16,
-        marginTop:2,
+        marginTop:5,
+        marginLeft:5,
         justifyContent:'center',
         alignItems:'center',
         color:'#ffffff',

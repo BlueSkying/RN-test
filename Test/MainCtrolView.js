@@ -68,6 +68,9 @@ export default class Test1 extends Component {
         var btnArray = [];
         var middleArray = [];
         var shopMailArray = [];
+        let projectID = '1562561263';
+        let userID = '1285858633';
+        let h5url = null;
         this.state = {
             weatherMap:weatherMap,
             bannerArray:bannerArray,
@@ -76,6 +79,9 @@ export default class Test1 extends Component {
             middleArray:middleArray,
             shopMailArray:shopMailArray,
             isShowPop:false,
+            projectID:projectID,
+            userID:userID,
+            h5url:h5url,
         }
         this.props.navigation.setParams({title: "生活家"});
     }
@@ -86,8 +92,9 @@ export default class Test1 extends Component {
             scanBrcode:this.scanBrcode,
             exchangeProject:this.exchange,
         });
-        this.getLongitudeAndLatitude();
         this.fetchBannerAds();
+        this.loadFromLocal();
+        this.getLongitudeAndLatitude();
         var conunter = 0;
         setInterval(()=>{
             if(this.state.bannerArray != null) {
@@ -106,7 +113,18 @@ export default class Test1 extends Component {
             }
         },3000);
     }
+    //加载本地缓存数据
+    loadFromLocal = async()=>{
+        let oldData =  global.storage.load({
+            key:'recommendList'
+        })
+        this.setState({
+            projectID:oldData!=null? oldData['data']['projectId']:'1562561263',
+            userId:oldData!=null? oldData['data']['contactId']:'1285858633',
+        })
 
+        this.fetchBannerAds();
+    }
     componentWillUnmount() {
         this.stopLocation()
     }
@@ -142,7 +160,7 @@ export default class Test1 extends Component {
     }
     //获取banner广告
     fetchBannerAds(){
-        Request.post(Config.api.bannerAdsUrl,{'type':'index','projectId':'38562569'},(data)=>{
+        Request.post(Config.api.bannerAdsUrl,{'type':'index','projectId':this.state.projectID},(data)=>{
             this.setState({
                bannerArray:data.ads,
             });
@@ -174,7 +192,7 @@ export default class Test1 extends Component {
     }
     //获取通栏广告
     fetchShopMail(){
-        Request.post(Config.api.shopMailUrl,{'projectId':'38562569'},(data)=>{
+        Request.post(Config.api.shopMailUrl,{'projectId':this.state.projectID},(data)=>{
               // console.warn(data.ad);
              this.setState({
                 middleArray:data.shop,
@@ -199,8 +217,11 @@ export default class Test1 extends Component {
          })
     };
 
-    _selectNewHouse = (item)=>{
-        console.warn(item);
+    //跳转新页面
+    toNewWebView = (url) =>{
+        console.warn(url)
+        const { navigate } = this.props.navigation;
+        navigate('WebViewVCN',{h5url:url});
     }
 
     navigatePress = () => {
@@ -209,11 +230,13 @@ export default class Test1 extends Component {
     }
     _renderItem = (info) => {
        return(
-           <View style={styles.shopMailBgStyle}>
+           <TouchableOpacity style={{flex: 1}} onPress={this.toNewWebView.bind(this,info.item.object.url)}>
+             <View style={styles.shopMailBgStyle}>
                <Text style={{color:'#333333',fontSize:15,height:20,paddingTop:0}}>{info.item.object.mainTitle}</Text>
                <Text style={{color:'#999999',fontSize:12,height:15,paddingTop:2}}>{info.item.object.subTitle}</Text>
                <Image source={{uri:info.item.object.imgUrl}} style={styles.shopMailStyle} />
-           </View>
+             </View>
+           </TouchableOpacity>
        );
     }
     //banner广告循环
@@ -278,12 +301,19 @@ export default class Test1 extends Component {
         var rightDown = this.state.middleArray[2];
             return (
                 <View style={{width: kwidth, height: 150, flexDirection: 'row'}}>
-                    <View style={{flex: 1}}>
-                        <Image source={{uri: leftShop != null?leftShop.imgUrl:''}} style={{flex: 1, height: 150}}/>
+                    <TouchableOpacity style={{flex: 1}} onPress={this.toNewWebView.bind(this,leftShop != null?leftShop.url:'')}>
+                    <View style={{flex: 1}} >
+                            <Image source={{uri: leftShop != null?leftShop.imgUrl:''}} style={{flex: 1, height: 150}}/>
+
                     </View>
+                    </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'column'}}>
-                        <Image source={{uri:rightTop != null?rightTop.imgUrl:''}} style={{flex:1,height:150}}/>
-                        <Image source={{uri:rightDown != null?rightDown.imgUrl:''}} style={{flex:1,height:150}}/>
+                        <TouchableOpacity style={{flex: 1}} onPress={this.toNewWebView.bind(this,rightTop != null?rightTop.url:'')}>
+                           <Image source={{uri:rightTop != null?rightTop.imgUrl:''}} style={{flex:1,height:150}}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{flex: 1}} onPress={this.toNewWebView.bind(this,rightDown != null?rightDown.url:'')}>
+                           <Image source={{uri:rightDown != null?rightDown.imgUrl:''}} style={{flex:1,height:150}}/>
+                        </TouchableOpacity>
                     </View>
                 </View>
             );
@@ -334,12 +364,14 @@ export default class Test1 extends Component {
                     onShow={()=>{this._startShow()}}
                 >
                     <HouseExchangeView  selectHouse = {(item)=>{
-                        // console.warn('回传值' + item.projectName),
+                         // console.warn('回传值' + item.projectId),
                         this.props.navigation.setParams({title: item.projectName});
                         this.setState({
-                            isShowPop:false
+                            isShowPop:false,
+                            projectID:item.projectId,
                         })
-                     }} showView={this.state.isShowPop} />
+                        this.fetchBannerAds()
+                     }} showView={this.state.isShowPop} userId={this.state.userId} />
                 </Modal>
             </View>
         );
