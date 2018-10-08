@@ -16,6 +16,7 @@ import {
     Dimensions,
     Modal,
     TouchableOpacity,
+    DeviceEventEmitter,
 } from 'react-native';
 import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
@@ -87,6 +88,23 @@ export default class Test1 extends Component {
     }
 
     componentDidMount(){
+        // 注册登录成功或失败的方法，便于更新页面
+        this.subsriptionLogIn = DeviceEventEmitter.addListener('LoginInSuccess',(contactID,projectID)=>{
+            // alert('登录成功回调')
+            this.setState({
+                projectID:projectID,
+                userID:contactID,
+            })
+            this.fetchBannerAds();
+        });
+        this.subsriptionLogOut = DeviceEventEmitter.addListener('LoginOutSuccess',()=>{
+            // alert('退出登录回调')
+            this.setState({
+                projectID:'1562561263',
+                userID:'1285858633',
+            })
+            this.fetchBannerAds();
+        });
         // 通过在componentDidMount里面设置setParams将title的值动态修改
         this.props.navigation.setParams({
             scanBrcode:this.scanBrcode,
@@ -114,19 +132,22 @@ export default class Test1 extends Component {
         },3000);
     }
     //加载本地缓存数据
-    loadFromLocal = async()=>{
-        let oldData =  global.storage.load({
+     loadFromLocal = async()=>{
+        let oldData = await global.storage.load({
             key:'recommendList'
         })
+        console.warn(oldData['data']['contactId'])
         this.setState({
             projectID:oldData!=null? oldData['data']['projectId']:'1562561263',
-            userId:oldData!=null? oldData['data']['contactId']:'1285858633',
+            userID:oldData!=null? oldData['data']['contactId']:'1285858633',
         })
 
         this.fetchBannerAds();
     }
     componentWillUnmount() {
         this.stopLocation()
+        this.subsriptionLogIn.remove()
+        this.subsriptionLogOut.remove()
     }
 
     //获取经纬度的方法  Longitude  Latitude
@@ -371,7 +392,7 @@ export default class Test1 extends Component {
                             projectID:item.projectId,
                         })
                         this.fetchBannerAds()
-                     }} showView={this.state.isShowPop} userId={this.state.userId} />
+                     }} showView={this.state.isShowPop} userId={this.state.userID} />
                 </Modal>
             </View>
         );

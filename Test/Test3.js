@@ -54,6 +54,7 @@ export default class Test3 extends Component {
         this.setState({
             userID:oldData['data']['contactId'],
             userToken:oldData['token'],
+            addressInfo:oldData['data']['projectName'] + oldData['data']['resourceName'],
         })
 
         this.fetchData();
@@ -87,16 +88,18 @@ export default class Test3 extends Component {
             ,require('../resources/my_icon_05.png'),require('../resources/my_icon_06.png'),require('../resources/my_icon_07.png'),require('../resources/my_icon_08.png')
             ,require('../resources/my_icon_09.png'),require('../resources/my_icon_10.png'),require('../resources/my_icon_11.png'),require('../resources/my_icon_12.png')];
         let headImageUrl = '';
-        let nickName = '生活家';
+        let nickName = '立即登录';
         let userID = null;
         let userToken = '';
-        let jiadouCount = '';
+        let jiadouCount = '0';
+        let addressInfo = '生活家,让生活更美好～';
         this.state = {
             headImageUrl :headImageUrl,
             nickName : nickName,
             userID : userID,
             userToken : userToken,
             jiadouCount : jiadouCount,
+            addressInfo : addressInfo,
         };
     }
     SettingVCN
@@ -106,10 +109,10 @@ export default class Test3 extends Component {
         navigate('SettingVCN',{callback:((info) =>{
                 this.setState({
                     headImageUrl : '',
-                    nickName : '生活家',
+                    nickName : '立即登录',
                     userID : null,
                     userToken : '',
-                    jiadouCount : '',
+                    jiadouCount : '0',
                 })
             })
         });
@@ -117,9 +120,10 @@ export default class Test3 extends Component {
 
     login(){
         const { navigate } = this.props.navigation;
-        navigate('LoginVCN',{callback:((info) =>{
+        navigate('LoginVCN',{callback:((info,address) =>{
                 this.setState({
                     userID:info,
+                    addressInfo:address,
                 })
                 this.fetchData();
                 this.queryScaleBeam();
@@ -152,10 +156,11 @@ export default class Test3 extends Component {
                   <Text style={styles.headerTitleName}>{this.state.nickName}</Text>
                   <ImageBackground source={require('../resources/filter40.png')} style={{flex:1,
                       flexDirection:'row',width:100,height:25,marginLeft:'auto',marginRight:'auto'}}>
-                      <Image source={require('../resources/jiadou_icon.png')} style={{flex:1,height:13,marginLeft:5,marginTop:6}} />
+                      <Image source={require('../resources/jiadou_icon.png')} style={{flex:1,width:12,height:15,marginLeft:5,marginTop:5}} />
                       <Text style={styles.jiadouTitle}>{this.state.jiadouCount} 个</Text>
                       <Image source={require("../resources/jiadou_arrow.png")} style={{flex:1,height:13,marginRight:5,marginTop:6}} />
                   </ImageBackground>
+                  <Text style={styles.addressStyle}>{this.state.addressInfo}</Text>
               </ImageBackground>
           </View>
         );
@@ -247,6 +252,13 @@ const styles = StyleSheet.create({
         marginLeft:'auto',
         marginRight:30,
         marginTop:15,
+    },
+    addressStyle:{
+        margin:5,
+        color:"#999999",
+        fontSize:13,
+        marginRight:'auto',
+        marginLeft:'auto',
     }
 });
 

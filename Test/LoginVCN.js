@@ -12,17 +12,18 @@ import {
     colors,
     AlertIOS,
     ScrollView,
+    DeviceEventEmitter,
 } from 'react-native';
 import Request from './Request';
 import Config from './config';
- import Storage from 'react-native-storage';
-var storge = new Storage({
+import Storage from 'react-native-storage';
+var storage = new Storage({
     size:1000,
     storageBackend:AsyncStorage,
     defaultExpires:null,
-    enableCache:null,
+    enableCache:true,
 })
-global.storage = storge
+global.storage = storage
 
 export const kwidth = Dimensions.get('window').width;
 // 获取设备屏幕高
@@ -40,10 +41,12 @@ export default class LoginVCN extends Component{
         let nameText = '';
         let passText = '';
         let userID = '';
+        let address = '';
         this.state = {
             nameText:nameText,
             passText:passText,
             userID : userID,
+            address : address,
         }
     }
 
@@ -53,7 +56,7 @@ export default class LoginVCN extends Component{
 
         //加载本地缓存数据
     loadFromLocal = async()=>{
-            let phone = await  storge.load({
+            let phone = await  global.storage.load({
                 key:'userInfo'
             })
             this.setState({
@@ -66,7 +69,7 @@ export default class LoginVCN extends Component{
         const { goBack } = this.props.navigation;
         goBack();
         if(this.props.navigation.state.params.callback){
-            this.props.navigation.state.params.callback(this.state.userID)
+            this.props.navigation.state.params.callback(this.state.userID,this.state.address)
         }
     }
 
@@ -85,20 +88,24 @@ export default class LoginVCN extends Component{
         //登录成功，需保存数据,然后返回
         Request.post(Config.api.loginUrl,{'params':{'loginName':name,'password':password,'xingeToken':''}},(data)=>{
             let jsonData = data;
-            storage.save({
-                key:'recommendList',
-                data:jsonData,
-                expires:null,
-            }),
-            storage.save({
-                key:'userInfo',
-                data:{'phone':this.state.nameText},
-                expires:null,
-            })
-            this.setState({
-                 userID : jsonData['data']['contactId'],
-            })
-            this.closeLogin();
+            if(data['status'] == 1){
+                global.storage.save({
+                    key:'recommendList',
+                    data:jsonData,
+                    expires:null,
+                }),
+                 global.storage.save({
+                     key:'userInfo',
+                     data:{'phone':this.state.nameText},
+                     expires:null,
+                 })
+                this.setState({
+                    userID : jsonData['data']['contactId'],
+                    address: jsonData['data']['projectName'] + jsonData['data']['resourceName'],
+                })
+                this.closeLogin();
+                DeviceEventEmitter.emit('LoginInSuccess',{'contactID':this.state.userID,'projectID':jsonData['data']['projectId']});
+            }
         },(error)=>{
             console.warn(error);
         });

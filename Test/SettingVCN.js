@@ -6,6 +6,7 @@ import {
     Text,
     Dimensions,
     TouchableOpacity,
+    DeviceEventEmitter,
 } from 'react-native';
 
 export const kwidth = Dimensions.get('window').width;
@@ -42,6 +43,7 @@ export default class SettingVCN extends Component{
         });
         global.storage.clearMap()
         this.closeLogin()
+        DeviceEventEmitter.emit('LoginOutSuccess');
     }
 
     //关闭本页面
