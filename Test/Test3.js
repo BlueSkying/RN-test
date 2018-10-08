@@ -113,6 +113,7 @@ export default class Test3 extends Component {
                     userID : null,
                     userToken : '',
                     jiadouCount : '0',
+                    addressInfo : '生活家,让生活更美好～',
                 })
             })
         });

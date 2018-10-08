@@ -104,7 +104,7 @@ export default class LoginVCN extends Component{
                     address: jsonData['data']['projectName'] + jsonData['data']['resourceName'],
                 })
                 this.closeLogin();
-                DeviceEventEmitter.emit('LoginInSuccess',{'contactID':this.state.userID,'projectID':jsonData['data']['projectId']});
+                DeviceEventEmitter.emit('LoginInSuccess',{'contactID':jsonData['data']['contactId'],'projectID':jsonData['data']['projectId']});
             }
         },(error)=>{
             console.warn(error);

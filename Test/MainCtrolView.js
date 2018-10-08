@@ -89,11 +89,11 @@ export default class Test1 extends Component {
 
     componentDidMount(){
         // 注册登录成功或失败的方法，便于更新页面
-        this.subsriptionLogIn = DeviceEventEmitter.addListener('LoginInSuccess',(contactID,projectID)=>{
-            // alert('登录成功回调')
+        this.subsriptionLogIn = DeviceEventEmitter.addListener('LoginInSuccess',(params)=>{
+             console.warn(params)
             this.setState({
-                projectID:projectID,
-                userID:contactID,
+                projectID:params['projectID'],
+                userID:params['contactID'],
             })
             this.fetchBannerAds();
         });
