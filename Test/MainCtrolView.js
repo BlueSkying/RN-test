@@ -17,6 +17,7 @@ import {
     Modal,
     TouchableOpacity,
     DeviceEventEmitter,
+    NativeModules,
 } from 'react-native';
 import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
@@ -27,6 +28,8 @@ import HouseExchangeView from './HouseExchangeView'
 let loactionID = null;
 var longitude = null;
 var latitude = null;
+//在js中需要调用oc定义的方法，需要先导入nativemodules
+var openDoor = NativeModules.PushNative;
 // 获取设备屏幕宽
 export const kwidth = Dimensions.get('window').width;
 // 获取设备屏幕高
@@ -38,12 +41,6 @@ export default class Test1 extends Component {
         return ({
             // 这里面的属性和App.js的navigationOptions是一样的。
             header: (
-                /*
-                <MainTitleView  scan={()=>navigation.state.params?navigation.state.params.scanBrcode():null}
-                                exchange = {()=>navigation.state.params?navigation.state.params.exchangeProject():null}
-                                titleString = {'生活家'}
-                />
-                */
                 <View style={styles.navContainer}>
                     <TouchableOpacity onPress={()=>navigation.state.params?navigation.state.params.scanBrcode():null}>
                         <Image source={require('../resources/in-scan-code.png')} style={styles.leftStyle}/>
@@ -243,12 +240,16 @@ export default class Test1 extends Component {
         console.warn(url)
         const { navigate } = this.props.navigation;
         navigate('WebViewVCN',{h5url:url});
-    }
-
+    };
+    //按钮点击
+    centerBtnClick = () =>{
+        console.warn('点击了按钮')
+        openDoor.RNOpenOpendoorVC('rn过来');
+    };
     navigatePress = () => {
         const { goBack } = this.props.navigation;
         goBack();
-    }
+    };
     _renderItem = (info) => {
        return(
            <TouchableOpacity style={{flex: 1}} onPress={this.toNewWebView.bind(this,info.item.object.url)}>
@@ -295,8 +296,10 @@ export default class Test1 extends Component {
                         {topArray.map(function (item) {
                             return(
                                 <View style={styles.bttonStyle}>
-                                    <Image source={{uri:item.realName?item.realName:''}} style={{width:45,height:45}} />
+                                    <TouchableOpacity style={{flex:1}} onPress={this.centerBtnClick}>
+                                    <Image source={{uri:item.realName?item.realName:''}} style={{width:45,height:45,marginTop:10,marginLeft:10}} />
                                     <Text>{item.funcName}</Text>
+                                    </TouchableOpacity>
                                 </View>
                              )
                         })}
@@ -389,7 +392,7 @@ export default class Test1 extends Component {
                         this.props.navigation.setParams({title: item.projectName});
                         this.setState({
                             isShowPop:false,
-                            projectID:item.projectId,
+                            projectID:item['projectId'],
                         })
                         this.fetchBannerAds()
                      }} showView={this.state.isShowPop} userId={this.state.userID} />
