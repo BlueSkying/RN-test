@@ -242,8 +242,8 @@ export default class Test1 extends Component {
         navigate('WebViewVCN',{h5url:url});
     };
     //按钮点击
-    centerBtnClick = () =>{
-        console.warn('点击了按钮')
+    centerBtnClick = (item) =>{
+        console.warn(item.funcName)
         openDoor.RNOpenOpendoorVC('rn过来');
     };
     navigatePress = () => {
@@ -287,6 +287,7 @@ export default class Test1 extends Component {
     }
     //按钮内容
     _btnsItem = (info) => {
+        let thiz = this;
         if(this.state.btnArray != null){
             let topArray = this.state.btnArray.slice(0,4);
             let downArray = this.state.btnArray.slice(4,8);
@@ -295,8 +296,8 @@ export default class Test1 extends Component {
                     <View style={styles.bttonHalfStyle}>
                         {topArray.map(function (item) {
                             return(
-                                <View style={styles.bttonStyle}>
-                                    <TouchableOpacity style={{flex:1}} onPress={this.centerBtnClick}>
+                                <View style={styles.bttonStyle} key={item.id}>
+                                    <TouchableOpacity key={item.id} style={{flex:1}} onPress={()=>thiz.centerBtnClick(item)}>
                                     <Image source={{uri:item.realName?item.realName:''}} style={{width:45,height:45,marginTop:10,marginLeft:10}} />
                                     <Text>{item.funcName}</Text>
                                     </TouchableOpacity>
@@ -307,9 +308,11 @@ export default class Test1 extends Component {
                     <View style={styles.bttonHalfStyle}>
                         {downArray.map(function (item) {
                             return(
-                                <View style={styles.bttonStyle}>
-                                    <Image source={{uri:item.realName?item.realName:''}} style={{width:45,height:45}} />
+                                <View style={styles.bttonStyle} key={item.id}>
+                                    <TouchableOpacity key={item.id} style={{flex:1}} onPress={()=>thiz.centerBtnClick(item)}>
+                                    <Image source={{uri:item.realName?item.realName:''}} style={{width:45,height:45,marginTop:10,marginLeft:10}} />
                                     <Text>{item.funcName}</Text>
+                                    </TouchableOpacity>
                                 </View>
                             )
                         })}
@@ -357,7 +360,7 @@ export default class Test1 extends Component {
         var dataarray = [];
         if (this.state.shopMailArray != null){
               var shopArray = this.state.shopMailArray.concat()
-              shopArray.map(function (item) {
+              shopArray.map(function (item,key) {
                 dataarray.push({key:item.mainTitle,object:item});
             })
         }
