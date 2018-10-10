@@ -244,7 +244,7 @@ export default class Test1 extends Component {
     //按钮点击
     centerBtnClick = (item) =>{
         console.warn(item.funcName)
-        openDoor.RNOpenOpendoorVC('rn过来');
+        openDoor.RNOpenOpendoorVC(item.funcName);
     };
     navigatePress = () => {
         const { goBack } = this.props.navigation;

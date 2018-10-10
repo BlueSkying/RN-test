@@ -1,1 +1,2 @@
 # RN-test
+1、rn在push进入原生页面的时候，原生页面需继承BaseviewCtroller,且实现viewwillappear和viewwilldisappear，目的是隐藏了系统导航栏在进入原生的时候需要显示，退出原生界面需要隐藏

@@ -8,11 +8,10 @@
 
 #import "OpenDoorMainVCN.h"
 #import <CoreBluetooth/CoreBluetooth.h>
-#import "MBProgressHUD.h"
+
 @interface OpenDoorMainVCN ()<CBCentralManagerDelegate>
 {
   CBCentralManager *cManager;
-  MBProgressHUD *hud;
 }
 @end
 
@@ -21,11 +20,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = NSLocalizedString(@"一键开门", @"一键开门");
+  NSLog(@"title==%@",self.titleString);
+    self.title = self.titleString;
     if(cManager){
       cManager = nil;
     }
     cManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+  [super viewWillAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+  [super viewWillDisappear:animated];
 }
 
 -(void)centralManagerDidUpdateState:(CBCentralManager *)central
@@ -38,35 +46,6 @@
   {
     NSLog(@"ble off");
     [self showProgress:@"请打开蓝牙才能使用此功能" withCtr:self withDismiss:YES];
-  }
-}
-
--(void)showProgress:(NSString *)message withCtr:(UIViewController *)viewControl withDismiss:(BOOL)dimiss{
-  dispatch_async(dispatch_get_main_queue(), ^{
-    // do what you want to do.
-    [self hideHud];
-    if(!viewControl.navigationController.view){
-      return;
-    }
-    hud = [MBProgressHUD showHUDAddedTo:viewControl.navigationController.view animated:YES];
-    //设置是否允许用户编辑
-    hud.userInteractionEnabled=NO;
-    // 隐藏时候从父控件中移除
-    hud.removeFromSuperViewOnHide = YES;
-    hud.labelText = message;
-    if(dimiss){
-      hud.mode = MBProgressHUDModeText;
-      [hud hide:YES afterDelay:2];
-    }else{
-      hud.mode = MBProgressHUDModeIndeterminate;
-    }
-  });
-}
-
--(void)hideHud{
-  if(hud){
-    [hud removeFromSuperview];
-    hud = nil;
   }
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface OpenDoorMainVCN : UIViewController
-
+#import "BaseViewController.h"
+@interface OpenDoorMainVCN : BaseViewController
+@property(nonatomic,strong) NSString * titleString;
 @end

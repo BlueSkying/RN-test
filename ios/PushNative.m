@@ -21,8 +21,9 @@ RCT_EXPORT_METHOD(RNOpenOpendoorVC:(NSString *)msg){
   //主要这里必须使用主线程发送，不然有可能失效
   dispatch_async(dispatch_get_main_queue(), ^{
     OpenDoorMainVCN * openDoorVCN = [OpenDoorMainVCN new];
-    UIViewController * nav = [UIApplication sharedApplication].keyWindow.rootViewController;
-    [nav.navigationController pushViewController:openDoorVCN animated:NO];
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    openDoorVCN.titleString = msg;
+    [app.nav pushViewController:openDoorVCN animated:NO];
   });
 }
 
