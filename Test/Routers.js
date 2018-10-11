@@ -33,7 +33,8 @@ import Detail2 from './Detail2.js';
 import ScanQrcode from './ScanQrcode.js'
 import WebViewVCN from './WebViewVCN.js'
 import LoginVCN from './LoginVCN.js'
-import SettingVCN from "./SettingVCN";
+import SettingVCN from "./SettingVCN.js";
+import BluetoothSerialVCN from "./BluetoothSerialVCN.js"
 
 const ManinIco = require('../resources/nav_icon_a02.png');
 const neberIcon = require('../resources/nav_icon_b02.png');
@@ -164,8 +165,10 @@ export default  MyApp = StackNavigator({
     },
     SettingVCN:{
         screen:SettingVCN,
+    },
+    BluetoothSerialVCN:{
+        screen:BluetoothSerialVCN,
     }
-
 },{
 
 });

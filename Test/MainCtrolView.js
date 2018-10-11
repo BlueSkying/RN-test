@@ -244,7 +244,12 @@ export default class Test1 extends Component {
     //按钮点击
     centerBtnClick = (item) =>{
         console.warn(item.funcName)
-        openDoor.RNOpenOpendoorVC(item.funcName);
+        if(item.funcName == '一键开门'){
+            const { navigate } = this.props.navigation;
+            navigate('BluetoothSerialVCN');
+        }else{
+            openDoor.RNOpenOpendoorVC(item.funcName);
+        }
     };
     navigatePress = () => {
         const { goBack } = this.props.navigation;
