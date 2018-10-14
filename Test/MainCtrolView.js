@@ -24,6 +24,7 @@ import MainTitleView from './MainTitleView.js';
 import Request from './Request';
 import Config from './config';
 import HouseExchangeView from './HouseExchangeView'
+import WechatTestVCN from "./WechatTestVCN";
 //监听定位的id
 let loactionID = null;
 var longitude = null;
@@ -247,7 +248,10 @@ export default class Test1 extends Component {
         if(item.funcName == '一键开门'){
             const { navigate } = this.props.navigation;
             navigate('BluetoothSerialVCN');
-        }else{
+        }else if(item.funcName == '在线缴费'){
+            const {navigate} = this.props.navigation;
+            navigate('WechatTestVCN');
+        } else{
             openDoor.RNOpenOpendoorVC(item.funcName);
         }
     };

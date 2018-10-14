@@ -72,7 +72,7 @@ export default class HouseExchangeView extends Component {
     // 回传选中的房屋
     _selectHouse = (item) =>{
          let house = item.object;
-         // console.warn('回传值' + house.projectName)
+           console.warn('回传值' + house.projectId+'房屋' +house.resourceId)
           this.props.selectHouse(house);
     }
 }

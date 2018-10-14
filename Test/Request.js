@@ -20,7 +20,8 @@ const  Request = {
             });
     },
     post:(url,dic,successCallback,failCallBack) =>{
-        console.log(url);
+        let token = this.loadFromLocal();
+        console.log('token1==' + token);
         return fetch(url,{
             method:"POST",
             headers:{
@@ -28,6 +29,7 @@ const  Request = {
                 "Content-Type":"application/json",
                 "version":"200",
                 "clientId":"10101",
+                "token":'2D2306C25896FFD490021732781171BE',
             },
             body:JSON.stringify(dic)
         })  .then((response)=>response.json())
@@ -39,4 +41,15 @@ const  Request = {
             })
     },
 };
+
+//加载本地缓存数据  A272BBCAFE9E34A8E28B59A80EA0C474
+loadFromLocal = async()=>{
+    let oldData = await global.storage.load({
+        key:'recommendList'
+    })
+    let token = oldData['token'];
+    console.warn('token==' + token);
+    return token;
+}
+
 module.exports = Request;

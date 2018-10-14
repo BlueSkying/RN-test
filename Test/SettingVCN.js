@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
         height:50,
         backgroundColor:'#2bb2c1',
         borderRadius:40,
-        marginLeft:15
+        marginLeft:15,
+        marginRight:15,
     },
     loginBtnStyel:{
         width:kwidth-30,
@@ -90,6 +91,5 @@ const styles = StyleSheet.create({
         fontSize:16,
         backgroundColor: 'transparent',
         color:'#ffffff',
-        marginLeft:15
     }
 });
