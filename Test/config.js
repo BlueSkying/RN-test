@@ -9,6 +9,7 @@ const Config={
         boundHouseUrl:"http://jcp.justbon.com/api/commons/getBindHouseInfo",
         loginUrl:"http://jcp.justbon.com/api/customer/userLogin",
         queryBeam:"http://openapi.justbon.cn/api/scarlettBean/queryScarlettBeam",
+        createPayUrl:"http://tokengateway.justbon.com/v1/api/createOrder",
         wechatPayUrl:'https://brcpay.justbon.com/pay/createPayInfo',
     },
 };

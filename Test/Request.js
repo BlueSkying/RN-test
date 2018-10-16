@@ -29,7 +29,7 @@ const  Request = {
                 "Content-Type":"application/json",
                 "version":"200",
                 "clientId":"10101",
-                "token":'2D2306C25896FFD490021732781171BE',
+                "token":'34FA9F5F826C927FF83E765D33F05ED5',
             },
             body:JSON.stringify(dic)
         })  .then((response)=>response.json())
