@@ -76,7 +76,6 @@ export default class WechatTestVCN extends Component {
 
 
     weChatPay = () => {
-        console.warn('订单ID=' + this.state.orderID)
         Request.post(Config.api.wechatPayUrl, {
             'payType': '2', "objType": "1", "tencyId": "1",
             'contactId': '1285858633', 'customerName': '18123399795', 'orderId': this.state.orderID, 'totalFee': '0.01'
