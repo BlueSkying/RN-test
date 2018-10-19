@@ -99,6 +99,7 @@ export default class LoginVCN extends Component{
                      data:{'phone':this.state.nameText},
                      expires:null,
                  })
+                global.userToken = jsonData['token'];
                 console.warn('login token==' + jsonData['token']);
                 this.setState({
                     userID : jsonData['data']['contactId'],
