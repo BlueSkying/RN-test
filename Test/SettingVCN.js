@@ -91,5 +91,5 @@ const styles = StyleSheet.create({
         fontSize:16,
         backgroundColor: 'transparent',
         color:'#ffffff',
-    }
+    },
 });
