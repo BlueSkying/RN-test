@@ -64,11 +64,14 @@ const MyTab = TabNavigator({
             // headerRight:{}, // 设置导航条右侧。可以是按钮或者其他。
             // headerLeft:{}, // 设置导航条左侧。可以是按钮或者其他。
             headerStyle:{
-                backgroundColor:'#4ECBFC'
+                backgroundColor:'#4ECBFC',
             }, // 设置导航条的样式。如果想去掉安卓导航条底部阴影可以添加elevation: 0,iOS去掉阴影是。
             headerTitleStyle:{
+                flex:1,
                 fontSize:30,
-                color:'white'
+                color:'white',
+                textAlign:'center',
+                alignSelf:'center'
             }, // 设置导航条文字样式。安卓上如果要设置文字居中，只要添加alignSelf:'center'就可以了
             // headerBackTitleStyle:{}, // 设置导航条返回文字样式。
             // headerTintColor:'green', // 设置导航栏文字颜色。总感觉和上面重叠了。

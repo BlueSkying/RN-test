@@ -8,6 +8,7 @@ import {
     Image,
     Dimensions,
     ImageBackground, DeviceEventEmitter,
+    Platform,
 } from 'react-native';
 export const kwidth = Dimensions.get('window').width;
 // 获取设备屏幕高
@@ -17,7 +18,9 @@ import Config from './config';
 import * as WeChat from 'react-native-wechat'
 export default class WechatTestVCN extends Component {
     static navigationOptions = ({navigation, screenProps}) => ({
-        headerTitle: "在线缴费"
+        headerTitle: "在线缴费",
+        headerTitleStyle:{flex:1,textAlign:'center',alignSelf:'center'},
+        headerRight:<View style={{width:30,height:30}}></View>
     });
 
     constructor(props) {
@@ -27,11 +30,11 @@ export default class WechatTestVCN extends Component {
 
     render() {
         return (
-            <View style={{flexDirection:'cloumn'}}>
+            <View style={{flexDirection:'column'}}>
                 <Text style={styles.contentStyle}>
                     你的物业欠费为0.01元请及时缴纳.
                 </Text>
-                <TouchableOpacity style={{flex: 1}} onPress={this.creatPayInfo}>
+                <TouchableOpacity  onPress={this.creatPayInfo}>
                     <View style={styles.btnBgStyle}>
                         <Text style={styles.payBtnStyel}>
                             立即支付

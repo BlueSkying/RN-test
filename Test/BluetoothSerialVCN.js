@@ -54,6 +54,12 @@ const DeviceList = ({ devices, connectedId, showConnectedIcon, onDevicePress }) 
 
 
 export default class BluetoothSerialVCN extends Component {
+    static navigationOptions = ({navigation, screenProps}) => ({
+        headerTitle: "一键开门",
+        headerTitleStyle:{flex:1,textAlign:'center',alignSelf:'center'},
+        headerRight:<View style={{width:30,height:30}}></View>
+    });
+
     constructor (props) {
         super(props)
         this.state = {

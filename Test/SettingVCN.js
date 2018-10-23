@@ -18,6 +18,8 @@ export default class SettingVCN extends Component{
     static navigationOptions = ({navigation,screenProps}) => ({
         // 这里面的属性和App.js的navigationOptions是一样的。
         headerTitle:navigation.state.params?navigation.state.params.headerTitle:'Detail1',
+        headerTitleStyle:{flex:1,textAlign:'center',alignSelf:'center'},
+        headerRight:<View style={{width:30,height:30}}></View>
     });
 
     constructor(props){

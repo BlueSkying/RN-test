@@ -30,6 +30,7 @@ export default class Test3 extends Component {
             // alert(index);
             jumpToIndex(scene['index']);
         }),
+        headerLeft:<View style={{width:30,height:30}}></View>,
         headerRight:(
             <TouchableOpacity onPress={()=>navigation.state.params.navigatePress()}>
             <View style={{marginRight:10}}>

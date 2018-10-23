@@ -18,6 +18,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
     NativeModules,
+    Platform,
 } from 'react-native';
 import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
@@ -47,12 +48,12 @@ export default class Test1 extends Component {
                         <Image source={require('../resources/in-scan-code.png')} style={styles.leftStyle}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={()=>navigation.state.params?navigation.state.params.exchangeProject():null}>
-                        <Text style={styles.titleStyle}>
+                        <View style={{width:kwidth-37-37,flexDirection:'row',justifyContent:'center',}}>
+                          <Text style={styles.titleStyle}>
                             {params ? params.title  : "生活家"}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>navigation.state.params?navigation.state.params.exchangeProject():null}>
-                        <Image source={require('../resources/in-arrow.png')} style={params ?params.title.length < 4?styles.rowStyle:params.title.length < 8?styles.row2Style : styles.row3Style : styles.rowStyle }/>
+                          </Text>
+                          <Image source={require('../resources/in-arrow.png')} style={styles.rowStyle}/>
+                        </View>
                     </TouchableOpacity>
                 </View>
             ),
@@ -252,7 +253,12 @@ export default class Test1 extends Component {
             const {navigate} = this.props.navigation;
             navigate('WechatTestVCN');
         } else{
-            openDoor.RNOpenOpendoorVC(item.funcName);
+            if (Platform.OS === 'ios'){
+                openDoor.RNOpenOpendoorVC(item.funcName);
+            }else{
+                alert(item.funcName);
+            }
+
         }
     };
     navigatePress = () => {
@@ -540,28 +546,13 @@ const styles = StyleSheet.create({
         color:"#333333",
         fontSize:18,
         textAlign:'center',
-        width:kwidth-(22+15)*2,
         justifyContent:'center',
-        marginLeft:0,
-        marginRight:'auto',
     },
     rowStyle:{
         width:10,
         height:10,
         marginTop:37,
-        marginLeft:-120,
-    },
-    row2Style:{
-        width:10,
-        height:10,
-        marginTop:37,
-        marginLeft:-80,
-    },
-    row3Style:{
-        width:10,
-        height:10,
-        marginTop:37,
-        marginLeft:-40,
+        marginLeft:0,
     }
 });
 
