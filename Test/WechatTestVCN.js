@@ -17,8 +17,7 @@ import Config from './config';
 import * as WeChat from 'react-native-wechat'
 export default class WechatTestVCN extends Component {
     static navigationOptions = ({navigation, screenProps}) => ({
-
-        headerTitle: '在线缴费',
+        headerTitle: "在线缴费"
     });
 
     constructor(props) {
@@ -28,12 +27,10 @@ export default class WechatTestVCN extends Component {
 
     render() {
         return (
-            <View>
+            <View style={{flexDirection:'cloumn'}}>
                 <Text style={styles.contentStyle}>
                     你的物业欠费为0.01元请及时缴纳.
                 </Text>
-                <View style={{width: kwidth, height: 40}}>
-                </View>
                 <TouchableOpacity style={{flex: 1}} onPress={this.creatPayInfo}>
                     <View style={styles.btnBgStyle}>
                         <Text style={styles.payBtnStyel}>
@@ -122,11 +119,13 @@ const styles = StyleSheet.create({
          fontSize:14,
      },
     btnBgStyle:{
+        marginTop:80,
         width:kwidth-30,
         height:50,
         backgroundColor:'#2bb2c1',
         borderRadius:40,
-         marginLeft:15
+        marginLeft:15,
+        marginRight:15,
     },
     payBtnStyel:{
         width:kwidth-30,

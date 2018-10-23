@@ -189,7 +189,7 @@ const TabOptions = (tabBarTitle,normalImage,selectedImage,navTitle) => {
         )
     });
     const headerTitle = navTitle;
-    const headerTitleStyle = {fontSize:22,color:'white',alignSelf:'center'};
+    const headerTitleStyle = {flex:1,fontSize:22,color:'white',textAlign:'center',alignSelf:'center'};
     // header的style
     const headerStyle = {backgroundColor:'#4ECBFC'};
     const tabBarVisible = true;
