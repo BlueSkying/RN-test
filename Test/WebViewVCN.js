@@ -28,8 +28,10 @@ export default class WebViewVCN extends Component {
             <View style={styles.container}>
                 <WebView scalesPageToFit={true}
                          bounces={false}
-                         source={{url: this.props.navigation.state.params.h5url}}
+                         source={{uri: this.props.navigation.state.params.h5url}}
                          style={styles.webSize}
+                         javaScriptEnabled={true}
+                         domStorageEnabled={true}
                          onLoad={(e) => console.warn('load')}
                          onLoadEnd={(e) => console.warn('onloadend')}
                          onLoadStart={(e) => {
