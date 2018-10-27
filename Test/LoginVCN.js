@@ -208,6 +208,8 @@ const styles = StyleSheet.create({
         borderColor:'gray',
         borderWidth:0,
         width:kwidth-100,
+        padding:0,
+        underlineColorAndroid:'transparent'
     },
     passInputStyle:{
         height:40,
@@ -215,6 +217,8 @@ const styles = StyleSheet.create({
         borderWidth:0,
         width:kwidth-100,
         marginLeft:26,
+        padding:0,
+        underlineColorAndroid:'transparent'
     },
     inputDowslineStyle:{
         marginLeft:15,
