@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     },
    rowItemTitle:{
        marginLeft:10,
-       marginTop:10,
+       marginTop:12,
        marginBottom:10,
        color:'#5c5c5c',
        fontSize:15,

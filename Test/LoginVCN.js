@@ -144,6 +144,7 @@ export default class LoginVCN extends Component{
                                placeholder='请输入手机号'
                                clearButtonMode={'while-editing'}
                                keyboardType='numeric'
+                               underlineColorAndroid='transparent'
                     />
                 </View>
                 <View style={styles.inputDowslineStyle}>
@@ -161,6 +162,7 @@ export default class LoginVCN extends Component{
                                placeholder='请输入密码'
                                clearButtonMode={'while-editing'}
                                secureTextEntry={true}
+                               underlineColorAndroid='transparent'
                                onSubmitEditing={()=>{this.testBlur()}}
                     />
                 </View>
@@ -215,7 +217,6 @@ const styles = StyleSheet.create({
         borderWidth:0,
         width:kwidth-100,
         padding:0,
-        underlineColorAndroid:'transparent'
     },
     passInputStyle:{
         height:40,
@@ -224,7 +225,6 @@ const styles = StyleSheet.create({
         width:kwidth-100,
         marginLeft:26,
         padding:0,
-        underlineColorAndroid:'transparent'
     },
     inputDowslineStyle:{
         marginLeft:15,
