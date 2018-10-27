@@ -154,12 +154,14 @@ export default class LoginVCN extends Component{
                     <Text style={{marginLeft:15,marginTop:10}}>
                         密码：
                     </Text>
-                    <TextInput style={styles.passInputStyle}
+                    <TextInput ref = 'inputWR'
+                               style={styles.passInputStyle}
                                onChangeText={(text)=>this.setState({passText:text})}
                                value={this.state.passText}
                                placeholder='请输入密码'
                                clearButtonMode={'while-editing'}
                                secureTextEntry={true}
+                               onSubmitEditing={()=>{this.testBlur()}}
                     />
                 </View>
                 <View style={styles.inputDowslineStyle}>
@@ -177,6 +179,10 @@ export default class LoginVCN extends Component{
             </View>
             </ScrollView>
         )
+    }
+
+    testBlur(){
+        this.refs.inputWR.blur()
     }
   }
 const styles = StyleSheet.create({
