@@ -26,6 +26,7 @@ import Request from './Request';
 import Config from './config';
 import HouseExchangeView from './HouseExchangeView'
 import WechatTestVCN from "./WechatTestVCN";
+import SplashScreen from 'react-native-splash-screen'
 //监听定位的id
 let loactionID = null;
 var longitude = null;
@@ -87,6 +88,8 @@ export default class Test1 extends Component {
     }
 
     componentDidMount(){
+        // 启动页面隐藏
+        SplashScreen.hide();
         // 注册登录成功或失败的方法，便于更新页面
         this.subsriptionLogIn = DeviceEventEmitter.addListener('LoginInSuccess',(params)=>{
              console.warn(params)
