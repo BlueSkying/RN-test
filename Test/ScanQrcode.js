@@ -84,7 +84,7 @@ export default class ScanQrcode extends React.Component{
                     <View style = {{height: Platform.OS == 'ios' ? (height-264)/3:(height-244)/3,width:width,backgroundColor:'rgba(0,0,0,0.5)',}}>
                     </View>
                     <View style={{flexDirection:'row'}}>
-                        <View style={styles.itemStyle}/>  //扫描框左边空白
+                        <View style={styles.itemStyle}></View>  /*扫描框左边空白*/
                         <ImageBackground style={styles.rectangle}  //扫描背景边框
                                          source={require('../resources/qr_scan_line.png')}>
                             <Animated.View style={[styles.animatiedStyle, {     //扫描的上下滚动条
@@ -97,7 +97,7 @@ export default class ScanQrcode extends React.Component{
                             }]}>
                             </Animated.View>
                         </ImageBackground>
-                        <View style={styles.itemStyle}/>   //扫描框右边空白
+                        <View style={styles.itemStyle}></View>   /*扫描框右边空白*/
                     </View>
                     <View style={{flex:1,backgroundColor:'rgba(0, 0, 0, 0.5)',width:width,alignItems:'center'}}>
                         <Text style={styles.textStyle}>将二维码放入框内,即可自动扫描</Text>
