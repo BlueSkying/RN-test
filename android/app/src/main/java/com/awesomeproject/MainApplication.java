@@ -3,6 +3,7 @@ package com.awesomeproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.lovebing.reactnative.baidumap.BaiduMapPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.theweflex.react.WeChatPackage;
 import com.rusel.RCTBluetoothSerial.RCTBluetoothSerialPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BaiduMapPackage(getApplicationContext()),
             new SplashScreenReactPackage(),
             new WeChatPackage(),
             new RCTBluetoothSerialPackage(),
