@@ -36,6 +36,7 @@ import LoginVCN from './LoginVCN.js'
 import SettingVCN from "./SettingVCN.js";
 import BluetoothSerialVCN from "./BluetoothSerialVCN.js"
 import WechatTestVCN from './WechatTestVCN.js'
+import TakePhotoVCN from './TakePhotoVCN.js'
 
 const ManinIco = require('../resources/nav_icon_a02.png');
 const neberIcon = require('../resources/nav_icon_b02.png');
@@ -175,6 +176,9 @@ export default  MyApp = StackNavigator({
     },
     WechatTestVCN:{
         screen:WechatTestVCN,
+    },
+    TakePhotoVCN:{
+        screen:TakePhotoVCN,
     }
 },{
 

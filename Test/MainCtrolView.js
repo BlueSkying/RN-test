@@ -20,7 +20,7 @@ import {
     NativeModules,
     Platform,
 } from 'react-native';
-import Geolocation from 'react-native-baidu-map';
+// import Geolocation from 'react-native-baidu-map';
 // import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
 import Request from './Request';
@@ -28,6 +28,7 @@ import Config from './config';
 import HouseExchangeView from './HouseExchangeView'
 import WechatTestVCN from "./WechatTestVCN";
 import SplashScreen from 'react-native-splash-screen'
+import TakePhotoVCN from './TakePhotoVCN'
 //监听定位的id
 let loactionID = null;
 var longitude = null;
@@ -116,7 +117,7 @@ export default class Test1 extends Component {
         this.fetchBannerAds();
         this.loadFromLocal();
         // this.getLongitudeAndLatitude();
-        this.getLongtitduAndLatitudeByBaidu();
+        // this.getLongtitduAndLatitudeByBaidu();
         var conunter = 0;
         setInterval(()=>{
             if(this.state.bannerArray != null) {
@@ -182,7 +183,7 @@ export default class Test1 extends Component {
                     longitude=location.coords.longitude.toString();
                     latitude=location.coords.latitude.toString();
                     this.fetchWeather();
-                    // Alert.alert(result);
+                     // Alert.alert(result);
                 },
                 error => {
                      Alert.alert("获取位置失败：" + error, "")
@@ -268,7 +269,10 @@ export default class Test1 extends Component {
         }else if(item.funcName == '在线缴费'){
             const {navigate} = this.props.navigation;
             navigate('WechatTestVCN');
-        } else{
+        }else if(item.funcName == '在线报修'){
+            const {navigate} = this.props.navigation;
+            navigate('TakePhotoVCN');
+        }else{
             if (Platform.OS === 'ios'){
                 openDoor.RNOpenOpendoorVC(item.funcName);
             }else{
