@@ -28,6 +28,7 @@ export default class ScanQrcode extends React.Component{
         };
     }
     componentDidMount(){
+        this.requestCameraPermission();
         InteractionManager.runAfterInteractions(()=>{
             this.startAnimation()
         });
@@ -63,6 +64,27 @@ export default class ScanQrcode extends React.Component{
                         [{text:'确定'}]
                 )
             }
+        }
+    }
+
+    async requestCameraPermission() {
+        if (Platform.OS == 'ios') return true;
+        //申请相机权限
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
+                title: '申请摄像头权限',
+                message: '一个很牛逼的应用想借用你的摄像头'
+            });
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('现在你获得摄像头权限了');
+                return true;
+            } else {
+                console.log('用户并不屌你');
+                return false;
+            }
+        } catch (err) {
+            console.warn(err);
+            return false;
         }
     }
 

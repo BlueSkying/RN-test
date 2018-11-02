@@ -10,6 +10,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import "RCTBaiduMapViewManager.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -33,6 +34,9 @@
   self.window.rootViewController = self.nav;
   [self.window makeKeyAndVisible];
   self.nav.navigationBar.hidden = YES;
+ 
+  [RCTBaiduMapViewManager initSDK:@"lqt6GuO4rwmtDpewTPrikpclh57ra1iV"];
+  
   return YES;
 }
 //微信添加

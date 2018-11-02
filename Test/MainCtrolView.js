@@ -20,8 +20,8 @@ import {
     NativeModules,
     Platform,
 } from 'react-native';
-// import Geolocation from 'react-native-baidu-map';
-// import Geolocation from 'Geolocation';
+ import {Geolocation, MapView,MapTypes,MapModule} from 'react-native-baidu-map';
+ // import Geolocation from 'Geolocation';
 import MainTitleView from './MainTitleView.js';
 import Request from './Request';
 import Config from './config';
@@ -91,7 +91,9 @@ export default class Test1 extends Component {
 
     componentDidMount(){
         // 启动页面隐藏
-        SplashScreen.hide();
+        if (Platform.OS === 'android'){
+            SplashScreen.hide();
+        }
         // 注册登录成功或失败的方法，便于更新页面
         this.subsriptionLogIn = DeviceEventEmitter.addListener('LoginInSuccess',(params)=>{
              console.warn(params)
@@ -116,8 +118,8 @@ export default class Test1 extends Component {
         });
         this.fetchBannerAds();
         this.loadFromLocal();
-        // this.getLongitudeAndLatitude();
-        // this.getLongtitduAndLatitudeByBaidu();
+         // this.getLongitudeAndLatitude();
+        this.getLongtitduAndLatitudeByBaidu();
         var conunter = 0;
         setInterval(()=>{
             if(this.state.bannerArray != null) {
@@ -156,11 +158,11 @@ export default class Test1 extends Component {
     }
     //百度地图获取经纬度
     getLongtitduAndLatitudeByBaidu = ()=>{
-        Geolocation.getCurrentPoint().then(
+        Geolocation.getCurrentPosition().then(
             (data)=>{
-                longitude = data.longitude,
-                latitude = data.latitude
-                this.fetchWeather();
+                 longitude = data.longitude,
+                 latitude = data.latitude,
+                 this.fetchWeather();
             }
         ).catch(error=>{
             console.warn(error,'error')

@@ -6,8 +6,10 @@ import {
     Text,
     TouchableHighlight,
     View,
+    Image,
 } from 'react-native';
 import Camera from 'react-native-camera';
+import Test3 from "./Test3";
 
 export default class TakePhotoVCN extends Component{
     static navigationOptions = ({navigation, screenProps}) => ({
@@ -18,8 +20,10 @@ export default class TakePhotoVCN extends Component{
 
     constructor(props){
         super(props)
+        let imagePath = '';
         this.state = {
-            cameraType : Camera.constants.Type.back
+            cameraType : Camera.constants.Type.back,
+            imagePath : imagePath
         };
     }
 
@@ -30,9 +34,17 @@ export default class TakePhotoVCN extends Component{
                    ref={(cam)=>{
                        this.camera = cam;
                    }}
+                    // Camera.constants.CaptureTarget.cameraRoll (default), 相册
+                    // Camera.constants.CaptureTarget.disk, 本地
+                    // Camera.constants.CaptureTarget.temp  缓存
+                    // 很重要的一个属性，最好不要使用默认的，使用disk或者temp，
+                    // 如果使用了cameraRoll，则返回的path路径为相册路径，图片没办法显示到界面上
+                   captureTarget = {Camera.constants.CaptureTarget.temp}
                    style={styles.preview}
                    type = {this.state.cameraType}
                    aspect = {Camera.constants.Aspect.fill}
+                   permissionDialogTitle = {'Permission to use camera'}
+                   permissionDialogMessage={'We need your permission to use your camera phone'}
                 >
                    <Text style={styles.button} onPress={this.switchCamera.bind(this)}>
                        切换涉嫌头
@@ -40,6 +52,10 @@ export default class TakePhotoVCN extends Component{
                    <Text style={styles.button} onPress={this.takePicture.bind(this)}>
                        拍照
                    </Text >
+
+                    /*拍照完毕，显示图片到界面上*/
+                    <Image style={{width: 100, height: 100, marginBottom: 20}} source={{uri: this.state.imagePath}}/>
+
                 </Camera>
             </View>
         );
@@ -55,10 +71,21 @@ export default class TakePhotoVCN extends Component{
         this.setState(state);
     }
 
-    takePicture(){
-        this.camera.capture()
-            .then(function (data) {
+    takePicture = async function(){
+        //jpegQuality 1-100,压缩图片
+        const options = {jpegQuality:50,base64:true};
+        await this.camera.capture({options})
+            .then( (data) =>{
                 alert('拍照成功，图片保存地址：\n' + data.path)
+
+                this.setState({
+                    imagePath:data.path,
+                });
+
+                Image.getSize(data.path,(width,height) =>{
+                    console.log(width,height);
+                })
+
             }).catch(err=>console.error(err));
     }
 }
@@ -88,4 +115,6 @@ const styles = StyleSheet.create({
         padding:10,
         margin:40,
     }
-})
+});
+
+AppRegistry.registerComponent('AwesomeProject',()=>TakePhotoVCN);
