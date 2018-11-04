@@ -28,7 +28,7 @@ import Config from './config';
 import HouseExchangeView from './HouseExchangeView'
 import WechatTestVCN from "./WechatTestVCN";
 import SplashScreen from 'react-native-splash-screen'
-import TakePhotoVCN from './TakePhotoVCN'
+import PhotoUsageVCN from "./PhotoUsageVCN";
 //监听定位的id
 let loactionID = null;
 var longitude = null;
@@ -92,7 +92,9 @@ export default class Test1 extends Component {
     componentDidMount(){
         // 启动页面隐藏
         if (Platform.OS === 'android'){
-            SplashScreen.hide();
+            setTimeout(() => {
+                SplashScreen.hide();
+            }, 1000);
         }
         // 注册登录成功或失败的方法，便于更新页面
         this.subsriptionLogIn = DeviceEventEmitter.addListener('LoginInSuccess',(params)=>{
@@ -264,21 +266,20 @@ export default class Test1 extends Component {
     };
     //按钮点击
     centerBtnClick = (item) =>{
-        console.warn(item.funcName)
-        if(item.funcName == '一键开门'){
+        if(item.funcName === '一键开门'){
             const { navigate } = this.props.navigation;
             navigate('BluetoothSerialVCN');
-        }else if(item.funcName == '在线缴费'){
+        }else if(item.funcName === '在线缴费'){
             const {navigate} = this.props.navigation;
             navigate('WechatTestVCN');
-        }else if(item.funcName == '在线报修'){
+        }else if(item.funcName === '在线报修'){
             const {navigate} = this.props.navigation;
-            navigate('TakePhotoVCN');
+            navigate('PhotoUsageVCN');
         }else{
             if (Platform.OS === 'ios'){
                 openDoor.RNOpenOpendoorVC(item.funcName);
             }else{
-                alert(item.funcName);
+                 alert(item.funcName);
             }
 
         }

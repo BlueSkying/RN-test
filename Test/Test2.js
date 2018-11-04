@@ -15,7 +15,7 @@ import {
     DeviceEventEmitter,
     Dimensions,
     WebView,
-    Linking,
+    Linking, Platform,
 } from 'react-native';
 
 export const kwidth = Dimensions.get('window').width;
@@ -73,7 +73,7 @@ export default class Test2 extends Component {
     }
 
     componentWillUnmount(){
-        this.subscription.remove();
+
     };
     componentDidMount(){
         // 通过在componentDidMount里面设置setParams将title的值动态修改
@@ -110,27 +110,33 @@ export default class Test2 extends Component {
     }
 
     render() {
-        bar()
+        // bar()
+        let sourceurl = 'http://mall.justbon.com.cn/m/project.html?uid=1285858633&userToken=CA1FC79A7910241C1479B3ABADD1EB2B'
         return (
-            <View style={styles.container}>
-                <WebView scalesPageToFit={true}
-                         bounces={false}
-                         source={{url:"http://mall.justbon.com.cn/m/project.html?uid=1285858633&userToken=CA1FC79A7910241C1479B3ABADD1EB2B"}}
-                         style={styles.webSize}
-                         onLoad={(e)=>console.log('load')}
-                         onLoadEnd={(e)=>console.log('onloadend')}
-                         startInLoadingState={true}
-                         thirdPartyCookiesEnabled={false}
-                         onLoadStart={(e)=>{
-                             return null
-                         }}
-                         renderError={()=>{
-                             return(<View><Text>renderError回调了，出现错误</Text></View>)
-                         }}
-                         renderLoading={()=>{
-                             return(<View><Text>加载中....</Text></View>)
-                         }}
-                         onShouldStartLoadWithRequest={(event)=>{
+             <WebView scalesPageToFit={Platform.OS === 'ios'? true:false}
+                      bounces={false}
+                      source={{uri:sourceurl}}
+                      style={styles.webSize}
+                      mixedContentMode={'always'}
+                      javaScriptEnabled={true}
+                      automaticallyAdjustContentInsets={true}
+                      domStorageEnabled={true}
+                      onLoad={(e) => console.warn('load')}
+                      onLoadEnd={(e) => console.warn('onloadend')}
+                      onLoadStart={(e) => {
+                          return (<View style={[styles.container, styles.horizontal]}>
+                            <ActivityIndicator size='large' color='#0000ff'/>
+                          </View>)
+                      }}
+                      renderError={() => {
+                      return (<View><Text>renderError回调了，出现错误</Text></View>)
+                      }}
+                      renderLoading={() => {
+                           return (<View style={[styles.container, styles.horizontal]}>
+                              {<ActivityIndicator size='large' color='#0000ff'/>}
+                           </View>)
+                       }}
+                      onShouldStartLoadWithRequest={(event)=>{
                                 if(event.url.includes('tel:')){
                                     this.linking(event.uri)
                                     return false
@@ -145,9 +151,8 @@ export default class Test2 extends Component {
                                     return true
                                 }
                              }
-                         }
+                      }
                 />
-            </View>
         );
     }
 }

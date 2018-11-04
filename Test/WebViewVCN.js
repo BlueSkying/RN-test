@@ -10,6 +10,7 @@ import {
     Dimensions,
     WebView,
     Linking,
+    Platform,
 } from 'react-native';
 import Test3 from "./Test3";
 export const kwidth = Dimensions.get('window').width;
@@ -25,12 +26,13 @@ export default class WebViewVCN extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <WebView scalesPageToFit={true}
+                <WebView scalesPageToFit={Platform.OS === 'ios'? true:false}
                          bounces={false}
                          source={{uri: this.props.navigation.state.params.h5url}}
                          style={styles.webSize}
+                         mixedContentMode={'always'}
                          javaScriptEnabled={true}
+                         automaticallyAdjustContentInsets={true}
                          domStorageEnabled={true}
                          onLoad={(e) => console.warn('load')}
                          onLoadEnd={(e) => console.warn('onloadend')}
@@ -60,7 +62,6 @@ export default class WebViewVCN extends Component {
                          }
                          }
                 />
-            </View>
         );
     }
 }

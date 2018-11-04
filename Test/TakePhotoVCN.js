@@ -52,10 +52,6 @@ export default class TakePhotoVCN extends Component{
                    <Text style={styles.button} onPress={this.takePicture.bind(this)}>
                        拍照
                    </Text >
-
-                    /*拍照完毕，显示图片到界面上*/
-                    <Image style={{width: 100, height: 100, marginBottom: 20}} source={{uri: this.state.imagePath}}/>
-
                 </Camera>
             </View>
         );
@@ -77,14 +73,15 @@ export default class TakePhotoVCN extends Component{
         await this.camera.capture({options})
             .then( (data) =>{
                 alert('拍照成功，图片保存地址：\n' + data.path)
-
-                this.setState({
-                    imagePath:data.path,
-                });
-
                 Image.getSize(data.path,(width,height) =>{
                     console.log(width,height);
                 })
+
+                const { goBack } = this.props.navigation;
+                goBack();
+                if(this.props.navigation.state.params.callback){
+                    this.props.navigation.state.params.callback(data.path)
+                }
 
             }).catch(err=>console.error(err));
     }
