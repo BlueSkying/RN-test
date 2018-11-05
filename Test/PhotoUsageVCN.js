@@ -4,18 +4,23 @@ import {
     StyleSheet,
     Text,
     View,
-    SectionList,
     TouchableOpacity,
     Image,
     Dimensions,
     ImageBackground,
 } from 'react-native';
-
+import {Geolocation, MapView,MapTypes,MapModule} from 'react-native-baidu-map';
 import TakePhotoVCN from "./TakePhotoVCN";
+import LatitudeLongtitudeSetting from "./LatitudeLongtitudeSetting";
 export const kwidth = Dimensions.get('window').width;
 // 获取设备屏幕高
 export const kheight = Dimensions.get('window').height;
-
+var DEF_PI = 3.14159265359; // PI
+var DEF_2PI = 6.28318530712; // 2*PI
+var DEF_PI180 = 0.01745329252; // PI/180.0
+var DEF_R = 6370693.5; // radius of earth
+var fitrstLongitude = null;
+var firstLatitude = null;
 export default class PhotoUsageVCN extends Component {
     static navigationOptions = ({navigation, screenProps}) => ({
         tabBarOnPress: (({scene, jumpToIndex}) => {
@@ -38,20 +43,88 @@ export default class PhotoUsageVCN extends Component {
         this.props.navigation.setParams({   //右键按钮需要注册
             navigatePress: this.navigatePress,
         });
+        this.loadFromLocal()
+        Geolocation.getCurrentPosition().then(
+            (data)=>{
+                this.setState({
+                    latitude : data.latitude,
+                    longtitude : data.longitude,
+                })
+                this.caculatDistant();
+            }
+        ).catch(error=>{
+            console.warn(error,'error')
+        })
+    }
+
+    loadFromLocal = async()=>{
+        let oldData = await global.storage.load({
+            key:'start'
+        })
+        console.warn(oldData['startLatitude'])
+        firstLatitude = oldData['startLatitude']
+        fitrstLongitude =  oldData['startLongtitude']
     }
 
     navigatePress = () => {
+        const { navigate } = this.props.navigation;
+        navigate('LatitudeLongtitudeSetting', {
+            callback: (() => {
+                this.loadFromLocal()
+            })
+        });
+    }
 
+    caculatDistant = ()=>{
+        console.warn(this.state.latitude,this.state.longtitude)
+         if (firstLatitude === null){
+             alert('请先设置起点的经纬度')
+             return;
+         }
+
+         firstLatitude = global.startLatitude
+         fitrstLongitude =  global.startLongtitude
+
+         this.getShortDistance(fitrstLongitude,firstLatitude,this.state.longtitude,this.state.latitude)
     }
 
     constructor(props) {
         super(props);
         let imagePath = '';
-        let textContent = '距离10公里处';
+        let textContent = '温馨提示：图片距离初始点大约10公里处';
+        let latitude = '';
+        let longtitude = '';
         this.state = {
             imagePath : imagePath,
             textContent:textContent,
+            latitude : latitude,
+            longtitude : longtitude,
         };
+    }
+
+    getShortDistance(lon1, lat1, lon2, lat2){
+        var ew1, ns1, ew2, ns2;
+        var dx, dy, dew;
+        var distance;
+        // 角度转换为弧度
+        ew1 = lon1 * DEF_PI180;
+        ns1 = lat1 * DEF_PI180;
+        ew2 = lon2 * DEF_PI180;
+        ns2 = lat2 * DEF_PI180;
+        // 经度差
+        dew = ew1 - ew2;
+        // 若跨东经和西经180 度，进行调整
+        if (dew > DEF_PI)
+            dew = DEF_2PI - dew;
+        else if (dew < -DEF_PI)
+            dew = DEF_2PI + dew;
+        dx = DEF_R * Math.cos(ns1) * dew; // 东西方向长度(在纬度圈上的投影长度)
+        dy = DEF_R * (ns1 - ns2); // 南北方向长度(在经度圈上的投影长度)
+        // 勾股定理求斜边长
+        distance = Math.sqrt(dx * dx + dy * dy).toFixed(0);
+        this.setState({
+            textContent : '温馨提示：图片距离初始点大约'+{distance}+'公里处'
+        })
     }
 
     takePicture = ()=>{
@@ -65,7 +138,9 @@ export default class PhotoUsageVCN extends Component {
     }
 
     cancelSave = ()=>{
-
+        this.setState({
+            imagePath:'',
+        })
     }
 
     savePicture = ()=>{
@@ -79,14 +154,15 @@ export default class PhotoUsageVCN extends Component {
                     {this.state.textContent}
                 </Text>
                 <Image source={{uri:this.state.imagePath}} style={styles.imgStyle}/>
-
-                <Text style={styles.button} onPress={this.takePicture.bind(this)}>
-                    拍照
-                </Text>
-                <Text style={styles.button} onPress={this.cancelSave.bind(this)}>
-                    取消
-                </Text >
-                <Text style={styles.button} onPress={this.savePicture.bind(this)}>
+                <View style={styles.buttonBgStyle}>
+                    <Text style={styles.button} onPress={this.takePicture.bind(this)}>
+                        拍照
+                    </Text>
+                    <Text style={styles.button} onPress={this.cancelSave.bind(this)}>
+                        取消
+                    </Text >
+                </View>
+                <Text style={styles.longButton} onPress={this.savePicture.bind(this)}>
                     保存
                 </Text >
             </View>
@@ -108,14 +184,28 @@ const styles = StyleSheet.create({
         marginTop:15,
         marginLeft:15,
     },
+    buttonBgStyle:{
+      width:kwidth,
+      height:50,
+      flexDirection:'row',
+    },
     button:{
-        flex:0,
         backgroundColor:"#fff",
         borderRadius:5,
         color:"#000",
-        padding:0,
-        margin:10,
-        width:40,
+        paddingTop:6,
+        margin:5,
+        textAlign:'center',
+        width:kwidth/2,
+        height:30,
+    },
+    longButton:{
+        backgroundColor:"#fff",
+        borderRadius:5,
+        color:"#000",
+        paddingTop:6,
+        textAlign:'center',
+        width:kwidth,
         height:30,
     }
 })
