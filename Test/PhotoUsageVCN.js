@@ -8,8 +8,10 @@ import {
     Image,
     Dimensions,
     ImageBackground,
+    Platform, CameraRoll,
 } from 'react-native';
 import {Geolocation, MapView,MapTypes,MapModule} from 'react-native-baidu-map';
+import {captureScreen,captureRef} from 'react-native-view-shot';
 import TakePhotoVCN from "./TakePhotoVCN";
 import LatitudeLongtitudeSetting from "./LatitudeLongtitudeSetting";
 export const kwidth = Dimensions.get('window').width;
@@ -43,14 +45,14 @@ export default class PhotoUsageVCN extends Component {
         this.props.navigation.setParams({   //右键按钮需要注册
             navigatePress: this.navigatePress,
         });
-        this.loadFromLocal()
+
         Geolocation.getCurrentPosition().then(
             (data)=>{
                 this.setState({
                     latitude : data.latitude,
                     longtitude : data.longitude,
                 })
-                this.caculatDistant();
+                this.loadFromLocal();
             }
         ).catch(error=>{
             console.warn(error,'error')
@@ -61,9 +63,15 @@ export default class PhotoUsageVCN extends Component {
         let oldData = await global.storage.load({
             key:'start'
         })
-        console.warn(oldData['startLatitude'])
         firstLatitude = oldData['startLatitude']
         fitrstLongitude =  oldData['startLongtitude']
+
+        if (firstLatitude === null){
+            alert('请点击右上角先设置起点的经纬度')
+            return;
+        }
+
+        this.getShortDistance(fitrstLongitude,firstLatitude,this.state.longtitude,this.state.latitude)
     }
 
     navigatePress = () => {
@@ -75,23 +83,10 @@ export default class PhotoUsageVCN extends Component {
         });
     }
 
-    caculatDistant = ()=>{
-        console.warn(this.state.latitude,this.state.longtitude)
-         if (firstLatitude === null){
-             alert('请先设置起点的经纬度')
-             return;
-         }
-
-         firstLatitude = global.startLatitude
-         fitrstLongitude =  global.startLongtitude
-
-         this.getShortDistance(fitrstLongitude,firstLatitude,this.state.longtitude,this.state.latitude)
-    }
-
     constructor(props) {
         super(props);
         let imagePath = '';
-        let textContent = '温馨提示：图片距离初始点大约10公里处';
+        let textContent = '温馨提示：图片距离初始点大约10米处';
         let latitude = '';
         let longtitude = '';
         this.state = {
@@ -103,6 +98,7 @@ export default class PhotoUsageVCN extends Component {
     }
 
     getShortDistance(lon1, lat1, lon2, lat2){
+        console.warn('计算'+ lon1,lat1,lon2,lat2)
         var ew1, ns1, ew2, ns2;
         var dx, dy, dew;
         var distance;
@@ -123,7 +119,7 @@ export default class PhotoUsageVCN extends Component {
         // 勾股定理求斜边长
         distance = Math.sqrt(dx * dx + dy * dy).toFixed(0);
         this.setState({
-            textContent : '温馨提示：图片距离初始点大约'+{distance}+'公里处'
+            textContent : '温馨提示：图片距离初始点大约'+distance+'米处'
         })
     }
 
@@ -144,16 +140,36 @@ export default class PhotoUsageVCN extends Component {
     }
 
     savePicture = ()=>{
+        captureRef(this.refs.needSave,{
+              format:"jpg",
+              quality:0.8,
+              result:'tmpfile',
+              snapshotContentContainer:true
+        }).then(
+                uri => {
+                    if (Platform === 'ios'){
+                        var promise = CameraRoll.saveToCameraRoll(uri)
+                            promise.then(function (result) {
+                                alert('图片已保存至相册')
+                            }).catch(function (error) {
+                                alert('保存失败')
+                            })
+                    }else{
 
+                    }
+                }
+         );
     }
 
     render(){
         return(
             <View style={styles.container}>
-                <Text style={styles.textStyle}>
-                    {this.state.textContent}
-                </Text>
-                <Image source={{uri:this.state.imagePath}} style={styles.imgStyle}/>
+                <View ref='needSave'>
+                    <Text style={styles.textStyle}>
+                        {this.state.textContent}
+                    </Text>
+                    <Image source={{uri:this.state.imagePath}} style={styles.imgStyle}/>
+                </View>
                 <View style={styles.buttonBgStyle}>
                     <Text style={styles.button} onPress={this.takePicture.bind(this)}>
                         拍照

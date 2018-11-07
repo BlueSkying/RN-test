@@ -30,10 +30,10 @@ export default class LatitudeLongtitudeSetting extends Component {
     constructor(props){
         super(props)
         let latitude = '';
-        let longtitude = '';
+        let longtude = '';
         this.state = {
             latitude:latitude,
-            longtitude:longtitude,
+            longtude:longtude,
         }
     }
 
@@ -43,26 +43,26 @@ export default class LatitudeLongtitudeSetting extends Component {
         })
         this.setState({
             latitude:oldData['startLatitude'],
-            longtitude:oldData['startLongtitude'],
+            longtude:oldData['startLongtitude'],
         })
     }
 
     //保存初始化信息
     saveInfo = ()=>{
-        let latitude = this.state.latitude
-        if(latitude == null){
+        let latitudeString = String(this.state.latitude)
+        if(latitudeString == null){
             alert('请输入起始点纬度')
             return;
         }
-        let longtitude = this.state.longtitude
-        if(longtitude.length == null){
+        let longtitudeString = String(this.state.longtude)
+        console.warn('保存2' + longtitudeString)
+        if(longtitudeString.length == null){
             alert('请输入起始点经度')
             return;
         }
-        console.warn(longtitude + latitude)
         global.storage.save({
             key:'start',
-            data:{'startLongtitude':longtitude,'startLatitude':latitude},
+            data:{'startLongtitude':longtitudeString,'startLatitude':latitudeString},
             expires:null,
         })
 
@@ -86,7 +86,7 @@ export default class LatitudeLongtitudeSetting extends Component {
                             起点纬度：
                         </Text>
                         <TextInput style={styles.phoneInputStyle}
-                                   onChangeText={(text)=>this.setState({nameText:text})}
+                                   onChangeText={(text)=>this.setState({latitude:text})}
                                    value={this.state.latitude}
                                    placeholder='请输入纬度,如：30.666093'
                                    clearButtonMode={'while-editing'}
@@ -104,12 +104,13 @@ export default class LatitudeLongtitudeSetting extends Component {
                         </Text>
                         <TextInput ref = 'inputWR'
                                    style={styles.passInputStyle}
-                                   onChangeText={(text)=>this.setState({passText:text})}
-                                   value={this.state.longtitude}
+                                   onChangeText={(text)=>this.setState({longtude:text})}
+                                   value={this.state.longtude}
                                    placeholder='请输入经度，如：104.07251'
                                    clearButtonMode={'while-editing'}
+                                   keyboardType='numeric'
                                    underlineColorAndroid='transparent'
-                                   onSubmitEditing={()=>{this.testBlur()}}
+                                   // onSubmitEditing={()=>{this.testBlur()}}
                         />
                     </View>
                     <View style={styles.inputDowslineStyle}>

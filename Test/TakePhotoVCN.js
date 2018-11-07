@@ -69,10 +69,9 @@ export default class TakePhotoVCN extends Component{
 
     takePicture = async function(){
         //jpegQuality 1-100,压缩图片
-        const options = {jpegQuality:50,base64:true};
+        const options = {jpegQuality:100,base64:true};
         await this.camera.capture({options})
             .then( (data) =>{
-                alert('拍照成功，图片保存地址：\n' + data.path)
                 Image.getSize(data.path,(width,height) =>{
                     console.log(width,height);
                 })
