@@ -139,14 +139,15 @@ export default class PhotoUsageVCN extends Component {
         })
     }
 
-    savePicture = ()=>{
-        captureRef(this.refs.needSave,{
+    snapshot = refname => () =>
+        captureRef(this.refs.refname,{
               format:"jpg",
               quality:0.8,
               result:'tmpfile',
               snapshotContentContainer:true
         }).then(
                 uri => {
+                    alert(uri);
                     if (Platform === 'ios'){
                         var promise = CameraRoll.saveToCameraRoll(uri)
                             promise.then(function (result) {
@@ -159,12 +160,11 @@ export default class PhotoUsageVCN extends Component {
                     }
                 }
          );
-    }
 
     render(){
         return(
-            <View style={styles.container}>
-                <View ref='needSave'>
+            <View ref='needSave' style={styles.container}>
+                <View >
                     <Text style={styles.textStyle}>
                         {this.state.textContent}
                     </Text>
@@ -178,7 +178,7 @@ export default class PhotoUsageVCN extends Component {
                         取消
                     </Text >
                 </View>
-                <Text style={styles.longButton} onPress={this.savePicture.bind(this)}>
+                <Text style={styles.longButton} onPress={this.snapshot("needSave").bind(this)}>
                     保存
                 </Text >
             </View>
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     },
     imgStyle:{
         width:kwidth,
-        height:kwidth/16*9,
+        height:kheight-70-120,
     },
     textStyle:{
         color:'#333333',
