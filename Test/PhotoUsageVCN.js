@@ -17,6 +17,7 @@ import LatitudeLongtitudeSetting from "./LatitudeLongtitudeSetting";
 export const kwidth = Dimensions.get('window').width;
 // 获取设备屏幕高
 export const kheight = Dimensions.get('window').height;
+const RNFS = require('react-native-fs');
 var DEF_PI = 3.14159265359; // PI
 var DEF_2PI = 6.28318530712; // 2*PI
 var DEF_PI180 = 0.01745329252; // PI/180.0
@@ -146,12 +147,22 @@ export default class PhotoUsageVCN extends Component {
             }
         ).then(
             uri =>  {
-                    var promise = CameraRoll.saveToCameraRoll(uri)
-                    promise.then(function (result) {
-                        alert('图片已保存至相册')
-                    }).catch(function (error) {
-                        alert('保存失败')
-                    })
+                       if(Platform === 'ios'){
+                           var promise = CameraRoll.saveToCameraRoll(uri)
+                           promise.then(function (result) {
+                               alert('图片已保存至相册')
+                           }).catch(function (error) {
+                               alert('保存失败')
+                           })
+                       }else{
+                           var promise = CameraRoll.saveToCameraRoll("file://" + uri);
+                           promise.then(function(result) {
+                               console.log("图片已保存至相册")
+                           }).catch(function(error) {
+                               console.log("保存失败")
+                           })
+                       }
+
             },
             error =>alert('oops,snapshot failed',error)
         );

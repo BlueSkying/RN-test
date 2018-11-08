@@ -3,6 +3,7 @@ package com.awesomeproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import org.lovebing.reactnative.baidumap.BaiduMapPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
             new RNViewShotPackage(),
             new BaiduMapPackage(getApplicationContext()),
             new SplashScreenReactPackage(),
