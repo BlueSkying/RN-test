@@ -139,27 +139,50 @@ export default class PhotoUsageVCN extends Component {
         })
     }
 
-    snapshot = refname => () =>
-        captureRef(this.refs.refname,{
-              format:"jpg",
+    snapCaptureScreen(){
+        captureScreen({
+              format:'jpg',
               quality:0.8,
-              result:'tmpfile',
-              snapshotContentContainer:true
+            }
+        ).then(
+            uri =>  {
+                    var promise = CameraRoll.saveToCameraRoll(uri)
+                    promise.then(function (result) {
+                        alert('图片已保存至相册')
+                    }).catch(function (error) {
+                        alert('保存失败')
+                    })
+            },
+            error =>alert('oops,snapshot failed',error)
+        );
+    }
+
+
+    snapshot(){
+        // let needSave = this.refs.needSave
+        captureRef(needSave,{
+            format:"jpg",
+            quality:0.8,
+            result:'tmpfile',
+            snapshotContentContainer:true
         }).then(
-                uri => {
-                    alert(uri);
-                    if (Platform === 'ios'){
+            uri =>  {
+                alert(uri)
+                if (Platform === 'ios'){
                         var promise = CameraRoll.saveToCameraRoll(uri)
                             promise.then(function (result) {
-                                alert('图片已保存至相册')
-                            }).catch(function (error) {
-                                alert('保存失败')
-                            })
-                    }else{
+                                  alert('图片已保存至相册')
+                         }).catch(function (error) {
+                             alert('保存失败')
+                      })
+                 }else{
 
-                    }
-                }
-         );
+                 }
+            },
+            error =>alert(error)
+        );
+    }
+
 
     render(){
         return(
@@ -178,7 +201,7 @@ export default class PhotoUsageVCN extends Component {
                         取消
                     </Text >
                 </View>
-                <Text style={styles.longButton} onPress={this.snapshot("needSave").bind(this)}>
+                <Text style={styles.longButton} onPress={this.snapCaptureScreen}>
                     保存
                 </Text >
             </View>
