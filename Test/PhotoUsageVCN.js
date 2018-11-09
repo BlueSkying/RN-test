@@ -9,6 +9,7 @@ import {
     Dimensions,
     ImageBackground,
     Platform, CameraRoll,
+    ScrollView,
 } from 'react-native';
 import {Geolocation, MapView,MapTypes,MapModule} from 'react-native-baidu-map';
 import {captureScreen,captureRef} from 'react-native-view-shot';
@@ -139,7 +140,7 @@ export default class PhotoUsageVCN extends Component {
             imagePath:'',
         })
     }
-
+    // 截取整个屏幕
     snapCaptureScreen(){
         captureScreen({
               format:'jpg',
@@ -168,27 +169,30 @@ export default class PhotoUsageVCN extends Component {
         );
     }
 
-
+    // 截取指定界面
     snapshot(){
-        // let needSave = this.refs.needSave
-        captureRef(needSave,{
+        captureRef(this.refs.needSave,{
             format:"jpg",
             quality:0.8,
             result:'tmpfile',
             snapshotContentContainer:true
         }).then(
             uri =>  {
-                alert(uri)
-                if (Platform === 'ios'){
-                        var promise = CameraRoll.saveToCameraRoll(uri)
-                            promise.then(function (result) {
-                                  alert('图片已保存至相册')
-                         }).catch(function (error) {
-                             alert('保存失败')
-                      })
-                 }else{
-
-                 }
+                         if(Platform === 'ios'){
+                               var promise = CameraRoll.saveToCameraRoll(uri)
+                               promise.then(function (result) {
+                               alert('图片已保存至相册')
+                              }).catch(function (error) {
+                                alert('保存失败')
+                               })
+                         }else{
+                                var promise = CameraRoll.saveToCameraRoll("file://" + uri);
+                                promise.then(function(result) {
+                                    alert('图片已保存至相册')
+                                }).catch(function(error) {
+                                    alert('保存失败')
+                         })
+                }
             },
             error =>alert(error)
         );
@@ -197,13 +201,13 @@ export default class PhotoUsageVCN extends Component {
 
     render(){
         return(
-            <View ref='needSave' style={styles.container}>
-                <View >
+            <View  style={styles.container}>
+                <ScrollView ref='needSave'>
                     <Text style={styles.textStyle}>
                         {this.state.textContent}
                     </Text>
                     <Image source={{uri:this.state.imagePath}} style={styles.imgStyle}/>
-                </View>
+                </ScrollView>
                 <View style={styles.buttonBgStyle}>
                     <Text style={styles.button} onPress={this.takePicture.bind(this)}>
                         拍照
@@ -212,7 +216,7 @@ export default class PhotoUsageVCN extends Component {
                         取消
                     </Text >
                 </View>
-                <Text style={styles.longButton} onPress={this.snapCaptureScreen}>
+                <Text style={styles.longButton} onPress={this.snapshot.bind(this)}>
                     保存
                 </Text >
             </View>
