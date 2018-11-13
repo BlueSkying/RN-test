@@ -3,6 +3,8 @@ package com.awesomeproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.reactnative.modules.update.UpdatePackage;
+import cn.reactnative.modules.update.UpdateContext;
 import com.rnfs.RNFSPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import org.lovebing.reactnative.baidumap.BaiduMapPackage;
@@ -25,11 +27,15 @@ public class MainApplication extends Application implements ReactApplication {
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
     }
-
+    @Override
+    protected String getJSBundleFile(){
+      return UpdateContext.getBundleUrl(MainApplication.this);
+    }
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new UpdatePackage(),
             new RNFSPackage(),
             new RNViewShotPackage(),
             new BaiduMapPackage(getApplicationContext()),

@@ -147,6 +147,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-update')
     compile project(':react-native-fs')
     compile project(':react-native-view-shot')
     compile project(':react-native-baidu-map')
