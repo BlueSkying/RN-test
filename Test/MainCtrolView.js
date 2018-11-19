@@ -29,6 +29,7 @@ import HouseExchangeView from './HouseExchangeView'
 import WechatTestVCN from "./WechatTestVCN";
 import SplashScreen from 'react-native-splash-screen'
 import PhotoUsageVCN from "./PhotoUsageVCN";
+import ResidentVCN from "./ResidentVCN";
 //监听定位的id
 let loactionID = null;
 var longitude = null;
@@ -275,6 +276,9 @@ export default class Test1 extends Component {
         }else if(item.funcName === '在线报修'){
             const {navigate} = this.props.navigation;
             navigate('PhotoUsageVCN');
+        }else if(item.funcName === '小区公告'){
+            const {navigate} = this.props.navigation;
+            navigate('ResidentVCN');
         }else{
             if (Platform.OS === 'ios'){
                 openDoor.RNOpenOpendoorVC(item.funcName);

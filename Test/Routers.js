@@ -39,6 +39,7 @@ import WechatTestVCN from './WechatTestVCN.js'
 import TakePhotoVCN from './TakePhotoVCN.js'
 import PhotoUsageVCN from './PhotoUsageVCN.js'
 import LatitudeLongtitudeSetting from './LatitudeLongtitudeSetting.js'
+import ResidentVCN from './ResidentVCN.js'
 
 const ManinIco = require('../resources/nav_icon_a02.png');
 const neberIcon = require('../resources/nav_icon_b02.png');
@@ -187,6 +188,9 @@ export default  MyApp = StackNavigator({
     },
     LatitudeLongtitudeSetting:{
         screen:LatitudeLongtitudeSetting,
+    },
+    ResidentVCN:{
+        screen:ResidentVCN,
     }
 },{
 

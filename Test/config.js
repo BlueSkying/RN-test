@@ -11,6 +11,7 @@ const Config={
         queryBeam:"http://openapi.justbon.cn/api/scarlettBean/queryScarlettBeam",
         createPayUrl:"http://tokengateway.justbon.com/v1/api/createOrder",
         wechatPayUrl:'https://brcpay.justbon.com/pay/createPayInfo',
+        residentListUrl:"http://jcp.justbon.com/api/article/app/query/map",
     },
 };
 
