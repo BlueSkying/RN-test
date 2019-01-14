@@ -46,10 +46,14 @@ export default class ResidentVCN extends Component{
         this.loadResident()
     }
 
+    componentWillUnmount() {
+        count = 1
+    }
+
     loadResident = ()=>{
         Request.post(Config.api.residentListUrl,{'params':{'contactId':this.state.userID,'projectId':this.state.projectID,
             'contentType':'1','classId':'villageNotice','pageSize':'20','page':String(count),'title':'','type':'1'}},(data)=>{
-            if(count === 1){
+            if(count == 1){
                 this.dataSource = data["data"]["list"]
             }else{
                 this.dataSource = this.dataSource.concat( data["data"]["list"])
@@ -102,6 +106,7 @@ export default class ResidentVCN extends Component{
                 <FlatList
                     onRefresh={()=>this.refreshing()}
                     refreshing={false}
+                    onEndReachedThreshold={0.2}    //当列表滚动到距离内容最底部不足0.2时候调用onEndReached
                     onEndReached={
                         ()=>this._onload()
                     }

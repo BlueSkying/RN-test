@@ -86,6 +86,7 @@ export default class Test1 extends Component {
             projectID:projectID,
             userID:userID,
             h5url:h5url,
+            isRefresh:false,
         }
         this.props.navigation.setParams({title: "生活家"});
     }
@@ -239,6 +240,7 @@ export default class Test1 extends Component {
              this.setState({
                 middleArray:data.shop,
                 shopMailArray:data.ad,
+                isRefresh:false
              });
         },(error)=>{
             console.warn(error);
@@ -395,9 +397,18 @@ export default class Test1 extends Component {
 
         </View>
     }
+
     _extraUniqueKey(item ,index){
         return "index"+index+item;
     }
+
+    _renderRefresh(){
+        this.setState({
+            isRefresh:true
+        })
+        this.fetchBannerAds();
+    }
+
     render() {
         var dataarray = [];
         if (this.state.shopMailArray != null){
@@ -424,6 +435,8 @@ export default class Test1 extends Component {
                  ItemSeparatorComponent = {()=><View><Text></Text></View>}
                  keyExtractor = {this._extraUniqueKey}// 每个item的key
                  removeClippedSubviews={false}
+                 refreshing={this.state.isRefresh}
+                 onRefresh={()=>this._renderRefresh()}
               />
                 <Modal
                     animationType={null}
