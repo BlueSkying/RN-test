@@ -30,6 +30,7 @@ import WechatTestVCN from "./WechatTestVCN";
 import SplashScreen from 'react-native-splash-screen'
 import PhotoUsageVCN from "./PhotoUsageVCN";
 import ResidentVCN from "./ResidentVCN";
+import PersonServiceView from "./PersonServiceView";
 //监听定位的id
 let loactionID = null;
 var longitude = null;
@@ -72,8 +73,10 @@ export default class Test1 extends Component {
         var btnArray = [];
         var middleArray = [];
         var shopMailArray = [];
+        var personServiceArray = [];
         let projectID = '1562561263';
         let userID = '1285858633';
+        let resuorceID = '';
         let h5url = null;
         this.state = {
             weatherMap:weatherMap,
@@ -82,11 +85,14 @@ export default class Test1 extends Component {
             btnArray:btnArray,
             middleArray:middleArray,
             shopMailArray:shopMailArray,
+            personServiceArray:personServiceArray,
             isShowPop:false,
             projectID:projectID,
             userID:userID,
+            resuorceID:resuorceID,
             h5url:h5url,
             isRefresh:false,
+            isShowPerson:false,
         }
         this.props.navigation.setParams({title: "生活家"});
     }
@@ -151,6 +157,7 @@ export default class Test1 extends Component {
         this.setState({
             projectID:oldData!=null? oldData['data']['projectId']:'1562561263',
             userID:oldData!=null? oldData['data']['contactId']:'1285858633',
+            resuorceID:oldData!=null? oldData['data']['contactId']:'',
         })
 
         this.fetchBannerAds();
@@ -246,6 +253,18 @@ export default class Test1 extends Component {
             console.warn(error);
         });
     }
+    //获取专属管家
+    fetchPersonService(){
+        Request.post(Config.api.personServiceUrl,{'token':global.userToken,'params':{'resourceId':this.state.resuorceID,
+                'projectId':this.state.projectID,'contactId':this.state.userID}},(data)=>{
+             console.warn(data);
+            this.setState({
+                personServiceArray:data,
+            });
+        },(error)=>{
+            console.warn(error);
+        });
+    }
     //点击了扫描按钮
     scanBrcode = () =>{
         const { navigate } = this.props.navigation;
@@ -281,6 +300,11 @@ export default class Test1 extends Component {
         }else if(item.funcName === '小区公告'){
             const {navigate} = this.props.navigation;
             navigate('ResidentVCN');
+        }else if(item.funcName === '专属管家'){
+            this.fetchPersonService(),
+            this.setState({
+                isShowPerson : true,
+            })
         }else{
             if (Platform.OS === 'ios'){
                 openDoor.RNOpenOpendoorVC(item.funcName);
@@ -454,6 +478,18 @@ export default class Test1 extends Component {
                         })
                         this.fetchBannerAds()
                      }} showView={this.state.isShowPop} userId={this.state.userID} />
+                </Modal>
+                <Modal
+                animationType={null}
+                transparent={true}
+                visible={this.state.isShowPerson}
+                // onRequestClose = {this.setState({isShowPerson : true})}
+                >
+                    <PersonServiceView  closeView = {()=>{
+                         this.setState({
+                             isShowPerson:false
+                         })
+                    }} userData = {this.state.personServiceArray}/>
                 </Modal>
             </View>
         );
