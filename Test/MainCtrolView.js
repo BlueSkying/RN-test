@@ -257,7 +257,7 @@ export default class Test1 extends Component {
     fetchPersonService(){
         Request.post(Config.api.personServiceUrl,{'token':global.userToken,'params':{'resourceId':this.state.resuorceID,
                 'projectId':this.state.projectID,'contactId':this.state.userID}},(data)=>{
-             console.warn(data);
+             console.warn('----data----'+data.data);
             this.setState({
                 personServiceArray:data,
             });
@@ -483,7 +483,7 @@ export default class Test1 extends Component {
                 animationType={null}
                 transparent={true}
                 visible={this.state.isShowPerson}
-                // onRequestClose = {this.setState({isShowPerson : true})}
+                // onRequestClose = {this._setPersonModalVisible(false)}
                 >
                     <PersonServiceView  closeView = {()=>{
                          this.setState({
@@ -522,6 +522,12 @@ export default class Test1 extends Component {
     _setModalVisible = (visible)=>{
         this.setState({
             isShowPop:visible
+        })
+    }
+
+    _setPersonModalVisible = (visible)=>{
+        this.setState({
+            isShowPerson:visible
         })
     }
 
