@@ -27,7 +27,8 @@ export default class PersonServiceView extends Component{
 
     render(){
         var array = this.props.userData;
-        var dict = array.first;
+        let dict = array[0];
+        console.warn('---data---' + dict.name)
         return(
         <View style={styles.bgstyle}>
             <View style={styles.contentStyle}>
@@ -36,9 +37,15 @@ export default class PersonServiceView extends Component{
                            source={require('../resources/cs_bt_close.png')}
                     />
                 </TouchableOpacity>
-                <Image style={styles.headStyle}
-                       source={require('../resources/head150.png')}
-                />
+                <View style={{flexDirection:'row',height:17.5+75}}>
+                   <Image style={styles.headStyle}
+                       source={{uri:dict.icon}}
+                   />
+                    <View style={{flexDirection:'column',flex:1}}>
+                        <Text style={styles.nameStyle}>{dict.name}</Text>
+                        <Text style={styles.projectNameStyle}>{dict.projectName}</Text>
+                    </View>
+                </View>
             </View>
         </View>
         )
@@ -71,6 +78,22 @@ const styles = StyleSheet.create({
          borderRadius:37.5,
          left:25,
          top:20-12.5,
+    },
+    nameStyle:{
+         marginLeft:40,
+         marginTop:20,
+         width:100,
+         height:20,
+         color:'#2bb2c1',
+         fontSize:18,
+    },
+    projectNameStyle:{
+         marginLeft:40,
+         marginTop:15,
+         width:150,
+         height:18,
+         color:'#666666',
+         fontSize:14
     }
 
 });

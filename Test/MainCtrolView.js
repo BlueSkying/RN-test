@@ -257,9 +257,9 @@ export default class Test1 extends Component {
     fetchPersonService(){
         Request.post(Config.api.personServiceUrl,{'token':global.userToken,'params':{'resourceId':this.state.resuorceID,
                 'projectId':this.state.projectID,'contactId':this.state.userID}},(data)=>{
-             console.warn('----data----'+data.data);
             this.setState({
-                personServiceArray:data,
+                personServiceArray:data.data,
+                isShowPerson : true,
             });
         },(error)=>{
             console.warn(error);
@@ -301,10 +301,7 @@ export default class Test1 extends Component {
             const {navigate} = this.props.navigation;
             navigate('ResidentVCN');
         }else if(item.funcName === '专属管家'){
-            this.fetchPersonService(),
-            this.setState({
-                isShowPerson : true,
-            })
+            this.fetchPersonService()
         }else{
             if (Platform.OS === 'ios'){
                 openDoor.RNOpenOpendoorVC(item.funcName);
@@ -475,6 +472,7 @@ export default class Test1 extends Component {
                         this.setState({
                             isShowPop:false,
                             projectID:item['projectId'],
+                            resuorceID:item['resourceId'],
                         })
                         this.fetchBannerAds()
                      }} showView={this.state.isShowPop} userId={this.state.userID} />
