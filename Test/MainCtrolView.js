@@ -222,6 +222,7 @@ export default class Test1 extends Component {
     //根据经纬度获取天气和现行情况
     fetchWeather(){
        Request.post(Config.api.wetherUrl,{'location':(longitude + "," + latitude)},(data)=>{
+           console.warn('--定位--' + data)
             this.setState({
                weatherMap:data,
             });
@@ -337,11 +338,15 @@ export default class Test1 extends Component {
     //天气预报  限行
     _weatherLimitItem = (info) =>{
         var xxlimit = this.state.weatherMap.xx;
+        var weather = '成都'+'        '+'晴'+'        '+'10℃'
+        if (this.state.weatherMap.city){
+            weather = this.state.weatherMap.city+'        '+this.state.weatherMap.weather+'        '+this.state.weatherMap.cTemperature+'℃'
+        }
         return(
             <View style={styles.weatherStyle}>
                 <Text style={styles.cityStyle}>
                     {
-                        this.state.weatherMap.city +'        '+ this.state.weatherMap.weather +'      '+ this.state.weatherMap.cTemperature +'℃'
+                        weather
                     }
                 </Text>
                 <Text style={styles.limitStyle}>
