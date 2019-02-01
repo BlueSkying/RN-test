@@ -303,6 +303,8 @@ export default class Test1 extends Component {
             navigate('ResidentVCN');
         }else if(item.funcName === '专属管家'){
             this.fetchPersonService()
+        }else if(item.funcName === '我的邮包'){
+            this.toNewWebView(Config.api.justbonWaterUrl)
         }else{
             if (Platform.OS === 'ios'){
                 openDoor.RNOpenOpendoorVC(item.funcName);
