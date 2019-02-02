@@ -14,6 +14,7 @@ const Config={
         residentListUrl:"http://jcp.justbon.com/api/article/app/query/map",
         personServiceUrl:"http://jcp.justbon.com/api/team/getTeam",
         justbonWaterUrl:"http://testwater.justbon.com/jiabaoWater/customer/index.html?#/consumer?customerNo=1285858633&customerName=justbon&customerTel=18123399795",
+        inviteFirendListUrl:"https://jcp.justbon.com/api/visitor/getVisitor",
     },
 };
 

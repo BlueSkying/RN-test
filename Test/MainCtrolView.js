@@ -31,6 +31,7 @@ import SplashScreen from 'react-native-splash-screen'
 import PhotoUsageVCN from "./PhotoUsageVCN";
 import ResidentVCN from "./ResidentVCN";
 import PersonServiceView from "./PersonServiceView";
+import InviteFriendVCN from "./InviteFriendVCN";
 //监听定位的id
 let loactionID = null;
 var longitude = null;
@@ -305,6 +306,9 @@ export default class Test1 extends Component {
             this.fetchPersonService()
         }else if(item.funcName === '我的邮包'){
             this.toNewWebView(Config.api.justbonWaterUrl)
+        }else if(item.funcName === '访客邀请'){
+            const {navigate} = this.props.navigation;
+            navigate('InviteFriendVCN')
         }else{
             if (Platform.OS === 'ios'){
                 openDoor.RNOpenOpendoorVC(item.funcName);
